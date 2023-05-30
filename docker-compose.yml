@@ -7,8 +7,11 @@ networks:
 volumes:
   nextcloud:
   db:
-  mariadb_data:
+  gitea_db:
+  moodledb_data:
     driver: local
+  # mariadb_data:
+  #   driver: local
   moodle_data:
     driver: local
   moodledata_data:
@@ -64,6 +67,11 @@ services:
     environment:
       - USER_UID=1000
       - USER_GID=1000
+      - GITEA__database__DB_TYPE=postgres
+      - GITEA__database__HOST=gitea_db:5432
+      - GITEA__database__NAME=gitea
+      - GITEA__database__USER=gitea
+      - GITEA__database__PASSWD=gitea
     restart: always
     volumes:
       - ./gitea:/data
@@ -72,34 +80,65 @@ services:
     ports:
       - "3000:3000"
       - "222:22"
-# Moodle ----------------------------------------------------------------------------------
-  mariadb:
-    image: docker.io/bitnami/mariadb:10.6
-    environment:
-      # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - ALLOW_EMPTY_PASSWORD=yes
-      - MARIADB_USER=bn_moodle
-      - MARIADB_DATABASE=bitnami_moodle
-      - MARIADB_CHARACTER_SET=utf8mb4
-      - MARIADB_COLLATE=utf8mb4_unicode_ci
+    depends_on:
+      - gitea_db
+  gitea_db:
+    image: postgres:14
+    container_name: gitea_db
+    restart: always
     volumes:
-      - 'mariadb_data:/bitnami/mariadb'
+      - gitea_db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=gitea
+      - POSTGRES_USER=gitea
+      - POSTGRES_PASSWORD=gitea
+# Moodle ----------------------------------------------------------------------------------
+  # mariadb:
+  #   image: docker.io/bitnami/mariadb:10.6
+  #   environment:
+  #     # ALLOW_EMPTY_PASSWORD is recommended only for development.
+  #     - ALLOW_EMPTY_PASSWORD=yes
+  #     - MARIADB_USER=bn_moodle
+  #     - MARIADB_DATABASE=bitnami_moodle
+  #     - MARIADB_CHARACTER_SET=utf8mb4
+  #     - MARIADB_COLLATE=utf8mb4_unicode_ci
+  #   volumes:
+  #     - 'mariadb_data:/bitnami/mariadb'
   moodle:
     image: docker.io/bitnami/moodle:4.2
     ports:
       - '8080:8080'
     environment:
-      - MOODLE_DATABASE_HOST=mariadb
-      - MOODLE_DATABASE_PORT_NUMBER=3306
-      - MOODLE_DATABASE_USER=bn_moodle
-      - MOODLE_DATABASE_NAME=bitnami_moodle
+      # - MOODLE_DATABASE_HOST=mariadb
+      # - MOODLE_DATABASE_PORT_NUMBER=3306
+      # - MOODLE_DATABASE_USER=bn_moodle
+      # - MOODLE_DATABASE_NAME=bitnami_moodle
+      - MOODLE_DATABASE_TYPE=pgsql
+      - MOODLE_DATABASE_HOST=moodle_db
+      - MOODLE_DATABASE_PORT_NUMBER=5432
+      - MOODLE_DATABASE_USER=moodle
+      - MOODLE_DATABASE_NAME=moodle
+      - MOODLE_DATABASE_PASSWORD=moodle
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - ALLOW_EMPTY_PASSWORD=yes
+      # - ALLOW_EMPTY_PASSWORD=yes
+      - MOODLE_USERNAME=binh
+      - MOODLE_PASSWORD=62MNB5q5efbs8
     volumes:
       - 'moodle_data:/bitnami/moodle'
       - 'moodledata_data:/bitnami/moodledata'
     depends_on:
-      - mariadb
+      # - mariadb
+      - moodle_db
+  moodle_db:
+    image: postgres:14
+    container_name: moodle_db
+    restart: always
+    volumes:
+      - moodledb_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=moodle
+      - POSTGRES_USER=moodle
+      - POSTGRES_PASSWORD=moodle
 # Nextcloud ----------------------------------------------------------------------------------
   db:
     image: postgres:13.11
@@ -133,3 +172,4 @@ services:
       - POSTGRES_HOST=db
       - REDIS_HOST=redis
       - PHP_MEMORY_LIMIT=1024M
+      - NEXTCLOUD_TRUSTED_DOMAINS=mirekng.com
