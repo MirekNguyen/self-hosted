@@ -1,4 +1,6 @@
+.env
+
 downloads
 gitea
 src
-.env
+certbot

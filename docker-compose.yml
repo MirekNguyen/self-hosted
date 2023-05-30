@@ -24,8 +24,11 @@ services:
     - ./nginx.conf:/etc/nginx/nginx.conf:ro
     - ./src:/usr/share/nginx/html
     - ./proxy_params:/etc/nginx/proxy_params
+    - ./certbot/www:/var/www/certbot/:ro
+    - ./certbot/conf/:/etc/nginx/ssl/:ro
     ports:
     - "80:80"
+    - "443:443"
     environment:
     - NGINX_HOST=${NGINX_HOST}
     - NGINX_PORT=80
@@ -35,6 +38,11 @@ services:
     image: php:8-fpm
     volumes:
       - ./src:/usr/share/nginx/html
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
 # Transmission ----------------------------------------------------------------------------------
   transmission:
     image: lscr.io/linuxserver/transmission:latest
