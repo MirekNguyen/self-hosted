@@ -10,8 +10,6 @@ volumes:
   gitea_db:
   moodledb_data:
     driver: local
-  # mariadb_data:
-  #   driver: local
   moodle_data:
     driver: local
   moodledata_data:
@@ -29,7 +27,7 @@ services:
     ports:
     - "80:80"
     environment:
-    - NGINX_HOST=mirekng.com
+    - NGINX_HOST=${NGINX_HOST}
     - NGINX_PORT=80
     links:
       - php-fpm
@@ -45,15 +43,15 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
+      - USER=${TRANSMISSION_USER}
+      - PASS=${TRANSMISSION_PASS}
       # - TRANSMISSION_WEB_HOME= #optional
-      - USER= #optional
-      - PASS= #optional
       # - WHITELIST= #optional
       # - PEERPORT= #optional
       # - HOST_WHITELIST= #optional
     volumes:
-      # - /path/to/data:/config
       - ./downloads:/downloads
+      # - /path/to/data:/config
       # - /path/to/watch/folder:/watch
     ports:
       - 9091:9091
@@ -69,9 +67,9 @@ services:
       - USER_GID=1000
       - GITEA__database__DB_TYPE=postgres
       - GITEA__database__HOST=gitea_db:5432
-      - GITEA__database__NAME=gitea
-      - GITEA__database__USER=gitea
-      - GITEA__database__PASSWD=gitea
+      - GITEA__database__NAME=${GITEA_DB_NAME}
+      - GITEA__database__USER=${GITEA_DB_USER}
+      - GITEA__database__PASSWD=${GITEA_DB_PASS}
     restart: always
     volumes:
       - ./gitea:/data
@@ -93,41 +91,23 @@ services:
       - POSTGRES_USER=gitea
       - POSTGRES_PASSWORD=gitea
 # Moodle ----------------------------------------------------------------------------------
-  # mariadb:
-  #   image: docker.io/bitnami/mariadb:10.6
-  #   environment:
-  #     # ALLOW_EMPTY_PASSWORD is recommended only for development.
-  #     - ALLOW_EMPTY_PASSWORD=yes
-  #     - MARIADB_USER=bn_moodle
-  #     - MARIADB_DATABASE=bitnami_moodle
-  #     - MARIADB_CHARACTER_SET=utf8mb4
-  #     - MARIADB_COLLATE=utf8mb4_unicode_ci
-  #   volumes:
-  #     - 'mariadb_data:/bitnami/mariadb'
   moodle:
     image: docker.io/bitnami/moodle:4.2
     ports:
       - '8080:8080'
     environment:
-      # - MOODLE_DATABASE_HOST=mariadb
-      # - MOODLE_DATABASE_PORT_NUMBER=3306
-      # - MOODLE_DATABASE_USER=bn_moodle
-      # - MOODLE_DATABASE_NAME=bitnami_moodle
       - MOODLE_DATABASE_TYPE=pgsql
       - MOODLE_DATABASE_HOST=moodle_db
       - MOODLE_DATABASE_PORT_NUMBER=5432
-      - MOODLE_DATABASE_USER=moodle
-      - MOODLE_DATABASE_NAME=moodle
-      - MOODLE_DATABASE_PASSWORD=moodle
-      # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      # - ALLOW_EMPTY_PASSWORD=yes
-      - MOODLE_USERNAME=binh
-      - MOODLE_PASSWORD=62MNB5q5efbs8
+      - MOODLE_DATABASE_NAME=${MOODLE_DB_NAME}
+      - MOODLE_DATABASE_USER=${MOODLE_DB_USER}
+      - MOODLE_DATABASE_PASSWORD=${MOODLE_DB_PASS}
+      - MOODLE_USERNAME=${MOODLE_USER}
+      - MOODLE_PASSWORD=${MOODLE_PASS}
     volumes:
       - 'moodle_data:/bitnami/moodle'
       - 'moodledata_data:/bitnami/moodledata'
     depends_on:
-      # - mariadb
       - moodle_db
   moodle_db:
     image: postgres:14
@@ -136,19 +116,19 @@ services:
     volumes:
       - moodledb_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=moodle
-      - POSTGRES_USER=moodle
-      - POSTGRES_PASSWORD=moodle
+      - POSTGRES_DB=${MOODLE_DB_NAME}
+      - POSTGRES_USER=${MOODLE_DB_USER}
+      - POSTGRES_PASSWORD=${MOODLE_DB_PASS}
 # Nextcloud ----------------------------------------------------------------------------------
   db:
-    image: postgres:13.11
+    image: postgres:14
     restart: always
     volumes:
       - db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=nextcloud
-      - POSTGRES_USER=nextcloud
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=${NEXTCLOUD_DB_NAME}
+      - POSTGRES_USER=${NEXTCLOUD_DB_USER}
+      - POSTGRES_PASSWORD=${NEXTCLOUD_DB_PASS}
   
   redis:
     image: redis
@@ -166,10 +146,10 @@ services:
     volumes:
       - nextcloud:/var/www/html
     environment:
-      - POSTGRES_DB=nextcloud
-      - POSTGRES_USER=nextcloud
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=${NEXTCLOUD_DB_NAME}
+      - POSTGRES_USER=${NEXTCLOUD_DB_USER}
+      - POSTGRES_PASSWORD=${NEXTCLOUD_DB_PASS}
       - POSTGRES_HOST=db
       - REDIS_HOST=redis
       - PHP_MEMORY_LIMIT=1024M
-      - NEXTCLOUD_TRUSTED_DOMAINS=mirekng.com
+      - NEXTCLOUD_TRUSTED_DOMAINS=${NGINX_HOST}
