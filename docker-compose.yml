@@ -58,7 +58,7 @@ services:
       # - PEERPORT= #optional
       # - HOST_WHITELIST= #optional
     volumes:
-      - ./downloads:/downloads
+      - ${TRANSMISSION_DOWNLOAD_DIR}:/downloads
       # - /path/to/data:/config
       # - /path/to/watch/folder:/watch
     ports:
