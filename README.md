@@ -30,3 +30,9 @@ sudo docker-compose run --rm certbot renew
 sudo crontab -e
 */5 * * * * docker exec -u www-data nextcloud php /var/www/html/cron.php
 ```
+
+## Nextcloud phone region
+
+```bash
+sudo docker-compose exec --user www-data nextcloud php occ config:system:set default_phone_region --value="CZ"
+```

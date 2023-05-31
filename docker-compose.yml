@@ -22,7 +22,7 @@ services:
     image: nginx
     volumes:
     - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    - ./src:/usr/share/nginx/html
+    - ./nginx:/usr/share/nginx/html
     - ./proxy_params:/etc/nginx/proxy_params
     - ./certbot/www:/var/www/certbot/:ro
     - ./certbot/conf/:/etc/nginx/ssl/:ro
@@ -37,7 +37,7 @@ services:
   php-fpm:
     image: php:8-fpm
     volumes:
-      - ./src:/usr/share/nginx/html
+      - ./nginx:/usr/share/nginx/html
   certbot:
     image: certbot/certbot:latest
     volumes:
