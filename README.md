@@ -9,13 +9,14 @@ setenforce 0
 ## Cerbot
 
 ```bash
-sudo docker-compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ \
+sudo docker-compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ \
 -d mirekng.com \
 -d www.mirekng.com \
 -d cloud.mirekng.com \
 -d git.mirekng.com \
 -d transmission.mirekng.com \
--d moodle.mirekng.com
+-d moodle.mirekng.com \
+-d aria.mirekng.com
 ```
 
 ## Certbot renew
