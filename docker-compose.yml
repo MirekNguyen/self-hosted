@@ -236,8 +236,7 @@ services:
       - TZ=Etc/UTC
     volumes:
       - ./sonarr-config:/config
-      # - /path/to/tvseries:/tv #optional
-      # - /path/to/downloadclient-downloads:/downloads #optional
+      - ${SONARR_TV_DIR}:/tv #optional
       - ${SONARR_DOWNLOAD_DIR}:/downloads #optional
     ports:
       - 8989:8989
@@ -252,10 +251,25 @@ services:
       - TZ=Etc/UTC
     volumes:
       - ./radarr-config:/config
-      # - /path/to/movies:/movies #optional
+      - ${RADARR_MOVIES_DIR}:/movies #optional
       - ${RADARR_DOWNLOAD_DIR}:/downloads #optional
     ports:
       - 7878:7878
+    restart: unless-stopped
+# Bazarr -------------------------------------------------------------------------------
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./bazarr-config:/config
+      - ${BAZARR_MOVIES_DIR}:/downloads/movies #optional
+      - ${BAZARR_TV_DIR}:/downloads/tv #optional
+    ports:
+      - 6767:6767
     restart: unless-stopped
 # Prowlarr -------------------------------------------------------------------------------
   prowlarr:
