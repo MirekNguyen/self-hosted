@@ -211,3 +211,47 @@ services:
       driver: json-file
       options:
         max-size: 1m
+# Jellyfin -------------------------------------------------------------------------------
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./jellyfin-config:/config
+      - ${JELLYFIN_SHOWS_DIR}:/data/tvshows
+      - ${JELLYFIN_MOVIES_DIR}:/data/movies
+    ports:
+      - 8096:8096
+    restart: unless-stopped
+# Sonarr -------------------------------------------------------------------------------
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./sonarr-config:/config
+      # - /path/to/tvseries:/tv #optional
+      # - /path/to/downloadclient-downloads:/downloads #optional
+      - ${SONARR_DOWNLOAD_DIR}:/downloads #optional
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+# Prowlarr -------------------------------------------------------------------------------
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./prowlarr-config:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped

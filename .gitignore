@@ -5,3 +5,7 @@ gitea
 src
 certbot
 nginx
+
+jellyfin-config
+sonarr-config
+prowlarr-config

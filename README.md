@@ -16,7 +16,10 @@ sudo docker-compose run --rm certbot certonly --webroot --webroot-path /var/www/
 -d git.mirekng.com \
 -d transmission.mirekng.com \
 -d moodle.mirekng.com \
--d aria.mirekng.com
+-d aria.mirekng.com \
+-d tv.mirekng.com \
+-d sonarr.mirekng.com \
+-d prowlarr.mirekng.com
 ```
 
 ## Certbot renew
