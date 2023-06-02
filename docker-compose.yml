@@ -242,6 +242,21 @@ services:
     ports:
       - 8989:8989
     restart: unless-stopped
+# Radarr -------------------------------------------------------------------------------
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./radarr-config:/config
+      # - /path/to/movies:/movies #optional
+      - ${RADARR_DOWNLOAD_DIR}:/downloads #optional
+    ports:
+      - 7878:7878
+    restart: unless-stopped
 # Prowlarr -------------------------------------------------------------------------------
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
@@ -255,3 +270,16 @@ services:
     ports:
       - 9696:9696
     restart: unless-stopped
+
+# Jellyseerr -------------------------------------------------------------------------------
+  jellyseerr:
+      image: fallenbagel/jellyseerr:latest
+      container_name: jellyseerr
+      environment:
+        - LOG_LEVEL=debug
+        - TZ=Etc/UTC
+      ports:
+        - 5055:5055
+      volumes:
+        - ./jellyseerr-config:/app/config
+      restart: unless-stopped

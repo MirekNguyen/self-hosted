@@ -9,3 +9,5 @@ nginx
 jellyfin-config
 sonarr-config
 prowlarr-config
+jellyseerr-config
+radarr-config
