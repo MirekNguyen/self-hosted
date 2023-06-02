@@ -6,7 +6,7 @@ networks:
 
 volumes:
   nextcloud:
-  db:
+  nextcloud_db:
   gitea_db:
   moodledb_data:
     driver: local
@@ -18,8 +18,9 @@ volumes:
 
 services:
 # Nginx ----------------------------------------------------------------------------------
-  web:
+  nginx:
     image: nginx
+    container_name: nginx
     volumes:
     - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     - ./config/nginx/src/:/usr/share/nginx/html
@@ -36,10 +37,12 @@ services:
       - php-fpm
   php-fpm:
     image: php:8-fpm
+    container_name: nginx-php-fpm
     volumes:
       - ./config/nginx/src:/usr/share/nginx/html
   certbot:
     image: certbot/certbot:latest
+    container_name: certbot
     volumes:
       - ./config/certbot/www/:/var/www/certbot/:rw
       - ./config/certbot/conf/:/etc/letsencrypt/:rw
@@ -101,6 +104,7 @@ services:
 # Moodle ----------------------------------------------------------------------------------
   moodle:
     image: docker.io/bitnami/moodle:4.2
+    container_name: moodle
     ports:
       - '8080:8080'
     environment:
@@ -128,11 +132,12 @@ services:
       - POSTGRES_USER=${MOODLE_DB_USER}
       - POSTGRES_PASSWORD=${MOODLE_DB_PASS}
 # Nextcloud ----------------------------------------------------------------------------------
-  db:
+  nextcloud_db:
     image: postgres:14
+    container_name: nextcloud_db
     restart: always
     volumes:
-      - db:/var/lib/postgresql/data
+      - nextcloud_db:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=${NEXTCLOUD_DB_NAME}
       - POSTGRES_USER=${NEXTCLOUD_DB_USER}
@@ -150,8 +155,9 @@ services:
     ports:
       - 8181:80
     links:
-      - db
+      - nextcloud_db
     volumes:
+      - nextcloud:/var/www/html
       - ${NEXTCLOUD_EXT_STORAGE}:/var/www/html/external
     environment:
       - POSTGRES_DB=${NEXTCLOUD_DB_NAME}
@@ -164,8 +170,8 @@ services:
       - NEXTCLOUD_TRUSTED_DOMAINS=${NGINX_HOST}
 # Aria2 Web UI -------------------------------------------------------------------------------
   Aria2-Pro:
-    container_name: aria2-pro
     image: p3terx/aria2-pro
+    container_name: aria2-pro
     environment:
       - PUID=65534
       - PGID=65534
@@ -198,8 +204,8 @@ services:
 
 # AriaNg is just a static web page, usually you only need to deploy on a single host.
   AriaNg:
-    container_name: ariang
     image: p3terx/ariang
+    container_name: ariang
     command: --port 6880 --ipv6
 #    network_mode: host
 #    network_mode: bridge
