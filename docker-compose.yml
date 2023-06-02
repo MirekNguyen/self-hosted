@@ -21,11 +21,11 @@ services:
   web:
     image: nginx
     volumes:
-    - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    - ./nginx:/usr/share/nginx/html
-    - ./proxy_params:/etc/nginx/proxy_params
-    - ./certbot/www:/var/www/certbot/:ro
-    - ./certbot/conf/:/etc/nginx/ssl/:ro
+    - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    - ./config/nginx/src/:/usr/share/nginx/html
+    - ./config/nginx/proxy_params:/etc/nginx/proxy_params
+    - ./config/certbot/www:/var/www/certbot/:ro
+    - ./config/certbot/conf/:/etc/nginx/ssl/:ro
     ports:
     - "80:80"
     - "443:443"
@@ -37,12 +37,12 @@ services:
   php-fpm:
     image: php:8-fpm
     volumes:
-      - ./nginx:/usr/share/nginx/html
+      - ./config/nginx/src:/usr/share/nginx/html
   certbot:
     image: certbot/certbot:latest
     volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
+      - ./config/certbot/www/:/var/www/certbot/:rw
+      - ./config/certbot/conf/:/etc/letsencrypt/:rw
 # Transmission ----------------------------------------------------------------------------------
   transmission:
     image: lscr.io/linuxserver/transmission:latest
@@ -59,7 +59,7 @@ services:
       # - HOST_WHITELIST= #optional
     volumes:
       - ${TRANSMISSION_DOWNLOAD_DIR}:/downloads
-      # - /path/to/data:/config
+      - ./config/transmission:/config
       # - /path/to/watch/folder:/watch
     ports:
       - 9091:9091
@@ -80,7 +80,7 @@ services:
       - GITEA__database__PASSWD=${GITEA_DB_PASS}
     restart: always
     volumes:
-      - ./gitea:/data
+      - ./config/gitea:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
@@ -152,7 +152,6 @@ services:
     links:
       - db
     volumes:
-      - nextcloud:/var/www/html
       - ${NEXTCLOUD_EXT_STORAGE}:/var/www/html/external
     environment:
       - POSTGRES_DB=${NEXTCLOUD_DB_NAME}
@@ -178,9 +177,9 @@ services:
       - IPV6_MODE=false
       - UPDATE_TRACKERS=true
       - CUSTOM_TRACKER_URL=
-      # - TZ=Asia/Shanghai
+      - TZ=Etc/UTC
     volumes:
-      # - ./aria2-config:/config
+      - ./config/aria2:/config
       - ${ARIA2_DOWNLOAD_DIR}:/downloads
 # If you use host network mode, then no port mapping is required.
 # This is the easiest way to use IPv6 networks.
@@ -220,7 +219,7 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
     volumes:
-      - ./jellyfin-config:/config
+      - ./config/jellyfin:/config
       - ${JELLYFIN_SHOWS_DIR}:/data/tvshows
       - ${JELLYFIN_MOVIES_DIR}:/data/movies
     ports:
@@ -235,7 +234,7 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
     volumes:
-      - ./sonarr-config:/config
+      - ./config/sonarr:/config
       - ${SONARR_TV_DIR}:/tv #optional
       - ${SONARR_DOWNLOAD_DIR}:/downloads #optional
     ports:
@@ -250,7 +249,7 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
     volumes:
-      - ./radarr-config:/config
+      - ./config/radarr:/config
       - ${RADARR_MOVIES_DIR}:/movies #optional
       - ${RADARR_DOWNLOAD_DIR}:/downloads #optional
     ports:
@@ -265,7 +264,7 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
     volumes:
-      - ./bazarr-config:/config
+      - ./config/bazarr:/config
       - ${BAZARR_MOVIES_DIR}:/downloads/movies #optional
       - ${BAZARR_TV_DIR}:/downloads/tv #optional
     ports:
@@ -280,7 +279,7 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
     volumes:
-      - ./prowlarr-config:/config
+      - ./config/prowlarr:/config
     ports:
       - 9696:9696
     restart: unless-stopped
@@ -295,5 +294,5 @@ services:
       ports:
         - 5055:5055
       volumes:
-        - ./jellyseerr-config:/app/config
+        - ./config/jellyseerr:/app/config
       restart: unless-stopped

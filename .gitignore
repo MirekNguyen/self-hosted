@@ -5,6 +5,7 @@ gitea
 src
 certbot
 nginx
+config
 
 jellyfin-config
 sonarr-config
