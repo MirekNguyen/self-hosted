@@ -1,15 +1,2 @@
 .env
-
-downloads
-gitea
-src
-certbot
-nginx
 config
-
-jellyfin-config
-sonarr-config
-prowlarr-config
-jellyseerr-config
-radarr-config
-bazarr-config

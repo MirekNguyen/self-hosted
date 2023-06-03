@@ -22,9 +22,9 @@ services:
     image: nginx
     container_name: nginx
     volumes:
-    - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    - ./nginx/proxy_params:/etc/nginx/proxy_params
     - ./config/nginx/src/:/usr/share/nginx/html
-    - ./config/nginx/proxy_params:/etc/nginx/proxy_params
     - ./config/certbot/www:/var/www/certbot/:ro
     - ./config/certbot/conf/:/etc/nginx/ssl/:ro
     ports:
