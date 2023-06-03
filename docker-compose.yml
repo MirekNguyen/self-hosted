@@ -118,6 +118,9 @@ services:
       - MOODLE_DATABASE_PASSWORD=${MOODLE_DB_PASS}
       - MOODLE_USERNAME=${MOODLE_USER}
       - MOODLE_PASSWORD=${MOODLE_PASS}
+      - PHP_UPLOAD_MAX_FILESIZE=8192M
+      - PHP_POST_MAX_SIZE=8192M
+      - PHP_ENABLE_OPCACHE=yes
     volumes:
       - 'moodle_data:/bitnami/moodle'
       - 'moodledata_data:/bitnami/moodledata'
