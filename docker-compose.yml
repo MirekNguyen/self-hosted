@@ -55,7 +55,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Etc/UTC
+      - TZ=${TIMEZONE}
       - USER=${TRANSMISSION_USER}
       - PASS=${TRANSMISSION_PASS}
       # - TRANSMISSION_WEB_HOME= #optional
@@ -188,7 +188,7 @@ services:
       - IPV6_MODE=false
       - UPDATE_TRACKERS=true
       - CUSTOM_TRACKER_URL=
-      - TZ=Etc/UTC
+      - TZ=${TIMEZONE}
     volumes:
       - ./config/aria2:/config
       - ${ARIA2_DOWNLOAD_DIR}:/downloads
@@ -228,7 +228,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Etc/UTC
+      - TZ=${TIMEZONE}
     volumes:
       - ./config/jellyfin:/config
       - ${JELLYFIN_SHOWS_DIR}:/data/tvshows
@@ -243,7 +243,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Etc/UTC
+      - TZ=${TIMEZONE}
     volumes:
       - ./config/sonarr:/config
       - ${SONARR_TV_DIR}:/tv #optional
@@ -258,7 +258,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Etc/UTC
+      - TZ=${TIMEZONE}
     volumes:
       - ./config/radarr:/config
       - ${RADARR_MOVIES_DIR}:/movies #optional
@@ -273,7 +273,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Etc/UTC
+      - TZ=${TIMEZONE}
     volumes:
       - ./config/bazarr:/config
       - ${BAZARR_MOVIES_DIR}:/downloads/movies #optional
@@ -288,7 +288,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Etc/UTC
+      - TZ=${TIMEZONE}
     volumes:
       - ./config/prowlarr:/config
     ports:
@@ -301,7 +301,7 @@ services:
       container_name: jellyseerr
       environment:
         - LOG_LEVEL=debug
-        - TZ=Etc/UTC
+        - TZ=${TIMEZONE}
       ports:
         - 5055:5055
       volumes:
