@@ -14,9 +14,9 @@ volumes:
     driver: local
   moodledata_data:
     driver: local
-  tube_cache:
-  tube_redis:
-  tube_es:
+  #  tube_cache:
+  #  tube_redis:
+  #  tube_es:
 
 
 
@@ -76,70 +76,70 @@ services:
       - 51413:51413/udp
     restart: unless-stopped
 # Gitea ----------------------------------------------------------------------------------
-  gitea:
-    image: gitea/gitea
-    container_name: gitea
-    environment:
-      - USER_UID=1000
-      - USER_GID=1000
-      - GITEA__database__DB_TYPE=postgres
-      - GITEA__database__HOST=gitea_db:5432
-      - GITEA__database__NAME=${GITEA_DB_NAME}
-      - GITEA__database__USER=${GITEA_DB_USER}
-      - GITEA__database__PASSWD=${GITEA_DB_PASS}
-    restart: always
-    volumes:
-      - ./config/gitea:/data
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    ports:
-      - "3000:3000"
-      - "222:22"
-    depends_on:
-      - gitea_db
-  gitea_db:
-    image: postgres:14
-    container_name: gitea_db
-    restart: always
-    volumes:
-      - gitea_db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=gitea
-      - POSTGRES_USER=gitea
-      - POSTGRES_PASSWORD=gitea
+  #  gitea:
+  #    image: gitea/gitea
+  #    container_name: gitea
+  #    environment:
+  #      - USER_UID=1000
+  #      - USER_GID=1000
+  #      - GITEA__database__DB_TYPE=postgres
+  #      - GITEA__database__HOST=gitea_db:5432
+  #      - GITEA__database__NAME=${GITEA_DB_NAME}
+  #      - GITEA__database__USER=${GITEA_DB_USER}
+  #      - GITEA__database__PASSWD=${GITEA_DB_PASS}
+  #    restart: always
+  #    volumes:
+  #      - ./config/gitea:/data
+  #      - /etc/timezone:/etc/timezone:ro
+  #      - /etc/localtime:/etc/localtime:ro
+  #    ports:
+  #      - "3000:3000"
+  #      - "222:22"
+  #    depends_on:
+  #      - gitea_db
+  #  gitea_db:
+  #    image: postgres:14
+  #    container_name: gitea_db
+  #    restart: always
+  #    volumes:
+  #      - gitea_db:/var/lib/postgresql/data
+  #    environment:
+  #      - POSTGRES_DB=gitea
+  #      - POSTGRES_USER=gitea
+  #      - POSTGRES_PASSWORD=gitea
 # Moodle ----------------------------------------------------------------------------------
-  moodle:
-    image: docker.io/bitnami/moodle:4.2
-    container_name: moodle
-    ports:
-      - '8080:8080'
-    environment:
-      - MOODLE_DATABASE_TYPE=pgsql
-      - MOODLE_DATABASE_HOST=moodle_db
-      - MOODLE_DATABASE_PORT_NUMBER=5432
-      - MOODLE_DATABASE_NAME=${MOODLE_DB_NAME}
-      - MOODLE_DATABASE_USER=${MOODLE_DB_USER}
-      - MOODLE_DATABASE_PASSWORD=${MOODLE_DB_PASS}
-      - MOODLE_USERNAME=${MOODLE_USER}
-      - MOODLE_PASSWORD=${MOODLE_PASS}
-      - PHP_UPLOAD_MAX_FILESIZE=8192M
-      - PHP_POST_MAX_SIZE=8192M
-      - PHP_ENABLE_OPCACHE=yes
-    volumes:
-      - 'moodle_data:/bitnami/moodle'
-      - 'moodledata_data:/bitnami/moodledata'
-    depends_on:
-      - moodle_db
-  moodle_db:
-    image: postgres:14
-    container_name: moodle_db
-    restart: always
-    volumes:
-      - moodledb_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=${MOODLE_DB_NAME}
-      - POSTGRES_USER=${MOODLE_DB_USER}
-      - POSTGRES_PASSWORD=${MOODLE_DB_PASS}
+  #  moodle:
+  #    image: docker.io/bitnami/moodle:4.2
+  #    container_name: moodle
+  #    ports:
+  #      - '8080:8080'
+  #    environment:
+  #      - MOODLE_DATABASE_TYPE=pgsql
+  #      - MOODLE_DATABASE_HOST=moodle_db
+  #      - MOODLE_DATABASE_PORT_NUMBER=5432
+  #      - MOODLE_DATABASE_NAME=${MOODLE_DB_NAME}
+  #      - MOODLE_DATABASE_USER=${MOODLE_DB_USER}
+  #      - MOODLE_DATABASE_PASSWORD=${MOODLE_DB_PASS}
+  #      - MOODLE_USERNAME=${MOODLE_USER}
+  #      - MOODLE_PASSWORD=${MOODLE_PASS}
+  #      - PHP_UPLOAD_MAX_FILESIZE=8192M
+  #      - PHP_POST_MAX_SIZE=8192M
+  #      - PHP_ENABLE_OPCACHE=yes
+  #    volumes:
+  #      - 'moodle_data:/bitnami/moodle'
+  #      - 'moodledata_data:/bitnami/moodledata'
+  #    depends_on:
+  #      - moodle_db
+  #  moodle_db:
+  #    image: postgres:14
+  #    container_name: moodle_db
+  #    restart: always
+  #    volumes:
+  #      - moodledb_data:/var/lib/postgresql/data
+  #    environment:
+  #      - POSTGRES_DB=${MOODLE_DB_NAME}
+  #      - POSTGRES_USER=${MOODLE_DB_USER}
+  #      - POSTGRES_PASSWORD=${MOODLE_DB_PASS}
 # Nextcloud ----------------------------------------------------------------------------------
   nextcloud_db:
     image: postgres:14
@@ -147,6 +147,7 @@ services:
     restart: always
     volumes:
       - nextcloud_db:/var/lib/postgresql/data
+      # - /home/binh/volumes/self-hosted_nextcloud_db/_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=${NEXTCLOUD_DB_NAME}
       - POSTGRES_USER=${NEXTCLOUD_DB_USER}
@@ -167,6 +168,7 @@ services:
       - nextcloud_db
     volumes:
       - nextcloud:/var/www/html
+      # - /home/binh/volumes/self-hosted_nextcloud/_data:/var/www/html
       - ${NEXTCLOUD_EXT_STORAGE}:/external
     environment:
       - POSTGRES_DB=${NEXTCLOUD_DB_NAME}
@@ -235,8 +237,10 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ./config/jellyfin:/config
-      - ${JELLYFIN_SHOWS_DIR}:/data/tvshows
+      - ${JELLYFIN_ANIME_DIR}:/data/anime
+      - ${JELLYFIN_TV_SHOWS_DIR}:/data/tv-shows
       - ${JELLYFIN_MOVIES_DIR}:/data/movies
+      - ${JELLYFIN_OTHER_MEDIA_DIR}:/data/other-media
     ports:
       - 8096:8096
     restart: unless-stopped
@@ -250,7 +254,8 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ./config/sonarr:/config
-      - ${SONARR_TV_DIR}:/tv #optional
+      - ${SONARR_ANIME_DIR}:/anime #optional
+      - ${SONARR_TV_SHOWS_DIR}:/tv-shows #optional
       - ${SONARR_DOWNLOAD_DIR}:/downloads #optional
     ports:
       - 8989:8989
@@ -313,53 +318,53 @@ services:
       restart: unless-stopped
 
 # Tube archivist -------------------------------------------------------------------------------
-  tubearchivist:
-    container_name: tubearchivist
-    restart: unless-stopped
-    image: bbilly1/tubearchivist
-    ports:
-      - 8000:8000
-    volumes:
-      - ${TUBE_MEDIA_DIR}:/youtube
-      - tube_cache:/cache
-    environment:
-      - ES_URL=http://archivist-es:9200
-      - REDIS_HOST=archivist-redis
-      - HOST_UID=1000
-      - HOST_GID=1000
-      - TA_HOST=${TUBE_HOST}
-      - TA_USERNAME=${TUBE_USER}
-      - TA_PASSWORD=${TUBE_PASS}
-      - ELASTIC_PASSWORD=${TUBE_ES_PASS}
-      - TZ=${TIMEZONE}
-    depends_on:
-      - archivist-es
-      - archivist-redis
-  archivist-redis:
-    image: redis/redis-stack-server
-    container_name: archivist-redis
-    restart: unless-stopped
-    expose:
-      - "6379"
-    volumes:
-      - tube_redis:/data
-    depends_on:
-      - archivist-es
-  archivist-es:
-    image: elasticsearch:8.7.0
-    container_name: archivist-es
-    restart: unless-stopped
-    environment:
-      - ELASTIC_PASSWORD=${TUBE_ES_PASS}
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "xpack.security.enabled=true"
-      - "discovery.type=single-node"
-      - "path.repo=/usr/share/elasticsearch/data/snapshot"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - tube_es:/usr/share/elasticsearch/data
-    expose:
-      - "9200"
+  #  tubearchivist:
+  #    container_name: tubearchivist
+  #    restart: unless-stopped
+  #    image: bbilly1/tubearchivist
+  #    ports:
+  #      - 8000:8000
+  #    volumes:
+  #      - ${TUBE_MEDIA_DIR}:/youtube
+  #      - tube_cache:/cache
+  #    environment:
+  #      - ES_URL=http://archivist-es:9200
+  #      - REDIS_HOST=archivist-redis
+  #      - HOST_UID=1000
+  #      - HOST_GID=1000
+  #      - TA_HOST=${TUBE_HOST}
+  #      - TA_USERNAME=${TUBE_USER}
+  #      - TA_PASSWORD=${TUBE_PASS}
+  #      - ELASTIC_PASSWORD=${TUBE_ES_PASS}
+  #      - TZ=${TIMEZONE}
+  #    depends_on:
+  #      - archivist-es
+  #      - archivist-redis
+  #  archivist-redis:
+  #    image: redis/redis-stack-server
+  #    container_name: archivist-redis
+  #    restart: unless-stopped
+  #    expose:
+  #      - "6379"
+  #    volumes:
+  #      - tube_redis:/data
+  #    depends_on:
+  #      - archivist-es
+  #  archivist-es:
+  #    image: elasticsearch:8.7.0
+  #    container_name: archivist-es
+  #    restart: unless-stopped
+  #    environment:
+  #      - ELASTIC_PASSWORD=${TUBE_ES_PASS}
+  #      - "ES_JAVA_OPTS=-Xms128m -Xmx512m"
+  #      - "xpack.security.enabled=true"
+  #      - "discovery.type=single-node"
+  #      - "path.repo=/usr/share/elasticsearch/data/snapshot"
+  #    ulimits:
+  #      memlock:
+  #        soft: -1
+  #        hard: -1
+  #    volumes:
+  #      - tube_es:/usr/share/elasticsearch/data
+  #    expose:
+  #      - "9200"
