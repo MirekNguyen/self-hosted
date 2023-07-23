@@ -1,0 +1,14 @@
+#!/bin/bash
+sudo docker-compose \
+--project-directory=/home/binh/self-hosted/ \
+-f docker-services/aria.yml \
+-f docker-services/flood.yml \
+-f docker-services/jellyfin.yml \
+-f docker-services/jellyseerr.yml \
+-f docker-services/prowlarr.yml \
+-f docker-services/radarr.yml \
+-f docker-services/sonarr.yml \
+-f docker-services/transmission.yml \
+-f docker-services/nextcloud.yml \
+-f docker-services/nginx.yml \
+down
