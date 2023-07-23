@@ -1,14 +1,14 @@
 #!/bin/bash
-sudo docker-compose \
---project-directory=/home/binh/self-hosted/ \
--f docker-services/aria.yml \
--f docker-services/flood.yml \
--f docker-services/jellyfin.yml \
--f docker-services/jellyseerr.yml \
--f docker-services/prowlarr.yml \
--f docker-services/radarr.yml \
--f docker-services/sonarr.yml \
--f docker-services/transmission.yml \
--f docker-services/nextcloud.yml \
--f docker-services/nginx.yml \
-down
+
+yml_directory="/home/binh/self-hosted/docker-services"
+project_directory="/home/binh/self-hosted/"
+
+yml_files=()
+
+for file in "$yml_directory"/*.yml; do
+    if [ -f "$file" ]; then
+        yml_files+=("-f $file")
+    fi
+done
+compose="sudo docker-compose --project-directory="$project_directory" "${yml_files[@]}" down"
+eval "$compose"
