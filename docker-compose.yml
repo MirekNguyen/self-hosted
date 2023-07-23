@@ -28,6 +28,8 @@ services:
     volumes:
     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     - ./nginx/proxy_params:/etc/nginx/proxy_params
+    - ./nginx/sites-enabled/:/etc/nginx/sites-enabled
+    - ./nginx/ssl_common/:/etc/nginx/ssl_common
     - ./config/nginx/src/:/usr/share/nginx/html
     - ./config/certbot/www:/var/www/certbot/:ro
     - ./config/certbot/conf/:/etc/nginx/ssl/:ro
