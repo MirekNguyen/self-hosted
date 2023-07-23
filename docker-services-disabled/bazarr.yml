@@ -1,0 +1,21 @@
+version: '3'
+
+networks:
+  default:
+    name: nginx-services
+
+services:
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${CONFIG_DIR}/bazarr:/config
+      - ${BAZARR_MOVIES_DIR}:/downloads/movies #optional
+      - ${BAZARR_TV_DIR}:/downloads/tv #optional
+    ports:
+      - 6767:6767
+    restart: unless-stopped

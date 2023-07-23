@@ -1,0 +1,15 @@
+version: '3'
+
+networks:
+  default:
+    name: nginx-services
+
+services:
+  flood:
+    image: jesec/flood
+    container_name: flood
+    volumes:
+      - ${CONFIG_DIR}/flood/:/data
+    ports:
+      - "3000:3000"
+    restart: unless-stopped

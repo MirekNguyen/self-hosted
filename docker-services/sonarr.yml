@@ -1,0 +1,22 @@
+version: '3'
+
+networks:
+  default:
+    name: nginx-services
+
+services:
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${CONFIG_DIR}/sonarr:/config
+      - ${SONARR_ANIME_DIR}:/anime #optional
+      - ${SONARR_TV_SHOWS_DIR}:/tv-shows #optional
+      - ${SONARR_DOWNLOAD_DIR}:/downloads #optional
+    ports:
+      - 8989:8989
+    restart: unless-stopped
