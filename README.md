@@ -1,47 +1,54 @@
-## SELinux
+# Self hosted
+I host numerous Docker services on my Raspberry Pi 4, this setup simplifies inter-container communication and enables flexible management. With custom Bash scripts and configurations, I can enable and disable containers on restart and control service states according to my needs.
+Please feel free to visit my website at [mirekng.com](https://mirekng.com/) to learn more about me and my projects.
 
-```bash
-sudo vi /etc/selinux/config
-SELINUX=disabled
-setenforce 0
+## Getting Started
+
+### Prerequisites
+
+You will need linux server and docker
+
+## Installation
+
+1. Clone the repository: `git clone https://github.com/mireknguyen/mirekng-homepage.git`
+2. Navigate to the project directory: cd mirekng-homepage
+3. Run the automation script to set up Docker services.
+```
+./docker-services-up
 ```
 
-## Cerbot
+## Usage
 
-```bash
-sudo docker-compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ \
--d mirekng.com \
--d www.mirekng.com \
--d cloud.mirekng.com \
--d git.mirekng.com \
--d transmission.mirekng.com \
--d moodle.mirekng.com \
--d aria.mirekng.com \
--d tv.mirekng.com \
--d sonarr.mirekng.com \
--d radarr.mirekng.com \
--d bazarr.mirekng.com \
--d prowlarr.mirekng.com \
--d jellyseerr.mirekng.com \
--d yt.mirekng.com \
--d flood.mirekng.com \
+- To start the Docker services, run:
+```
+cd <project-folder> && ./docker-services-up
+```
+- To stop the services, run:
+```
+cd <project-folder> && ./docker-services-down
 ```
 
-## Certbot renew
+## Systemd
 
-```bash
-sudo docker-compose run --rm certbot renew
+1. Create a systemd file
+```
+touch /etc/systemd/system/self-hosted.service
 ```
 
-## Nextcloud cronjob
-
-```bash
-sudo crontab -e
-*/5 * * * * docker exec -u www-data nextcloud php /var/www/html/cron.php
+2. Add this (use your installation directory)
 ```
+[Unit]
+Description=%i service with docker compose
+PartOf=docker.service
+After=docker.service
 
-## Nextcloud phone region
+[Service]
+Type=oneshot
+RemainAfterExit=true
+WorkingDirectory=/home/user/self-hosted/
+ExecStart=/home/user/self-hosted/docker-services-up
+ExecStop=/home/user/self-hosted/docker-services-down
 
-```bash
-sudo docker-compose exec --user www-data nextcloud php occ config:system:set default_phone_region --value="CZ"
+[Install]
+WantedBy=multi-user.target
 ```
