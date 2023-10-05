@@ -1,5 +1,5 @@
 <p align="center">
-<img width="400" alt="self-hosted" src="https://github.com/MirekNguyen/self-hosted/assets/65291610/9b4eb572-f8a1-4a7f-ab15-cb40987ad3cd">
+<img width="800" alt="self-hosted" src="https://github.com/MirekNguyen/self-hosted/assets/65291610/9b4eb572-f8a1-4a7f-ab15-cb40987ad3cd">
 </p>
 
 # Self hosted
