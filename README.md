@@ -56,3 +56,14 @@ ExecStop=/home/user/self-hosted/docker-services-down
 [Install]
 WantedBy=multi-user.target
 ```
+
+## Run individual yml service
+
+```
+sudo docker-compose --env-file="./.env" --project-directory="./docker-services" -f "./docker-services/service.yml" up -d --remove-orphans
+```
+
+## Docker run
+```
+sudo docker-compose --env-file="./.env" --project-directory="./docker-services" -f "./docker-services/service.yml" up -d --remove-orphans
+```

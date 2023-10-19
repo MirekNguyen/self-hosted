@@ -1,6 +1,6 @@
 #!/bin/bash
 
-yml_directory="/home/binh/self-hosted/docker-services"
+yml_directory="/home/binh/self-hosted/services-enabled"
 project_directory="/home/binh/self-hosted/"
 
 yml_files=()
@@ -10,5 +10,5 @@ for file in "$yml_directory"/*.yml; do
         yml_files+=("-f $file")
     fi
 done
-compose="sudo docker-compose --project-directory="$project_directory" "${yml_files[@]}" down"
+compose="sudo docker-compose --project-directory="$project_directory" "${yml_files[@]}" $@"
 eval "$compose"
