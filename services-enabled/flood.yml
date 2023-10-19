@@ -7,9 +7,11 @@ networks:
 services:
   flood:
     image: jesec/flood
+    environment:
+      HOME: /config
     container_name: flood
     volumes:
-      - ${CONFIG_DIR}/flood/:/data
+      - ${CONFIG_DIR}/flood/:/config
     ports:
       - "3000:3000"
     restart: unless-stopped
