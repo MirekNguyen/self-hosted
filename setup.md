@@ -9,7 +9,7 @@ setenforce 0
 ## Cerbot
 
 ```bash
-sudo docker-compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ \
+sudo docker-compose -f ./services-enabled/certbot.yml --project-dir=. run --rm certbot certonly --force-renewal --webroot --webroot-path /var/www/certbot/ \
 -d mirekng.com \
 -d www.mirekng.com \
 -d cloud.mirekng.com \
@@ -25,6 +25,27 @@ sudo docker-compose run --rm certbot certonly --webroot --webroot-path /var/www/
 -d jellyseerr.mirekng.com \
 -d yt.mirekng.com \
 -d flood.mirekng.com \
+-d dashboard.mirekng.net \
+-d api.mirekng.com
+
+sudo docker-compose -f ./services-enabled/certbot.yml --project-dir=. run --rm certbot certonly --force-renewal --webroot --webroot-path /var/www/certbot/ \
+-d mirekng.net \
+-d www.mirekng.net \
+-d cloud.mirekng.net \
+-d git.mirekng.net \
+-d transmission.mirekng.net \
+-d moodle.mirekng.net \
+-d aria.mirekng.net \
+-d tv.mirekng.net \
+-d sonarr.mirekng.net \
+-d radarr.mirekng.net \
+-d bazarr.mirekng.net \
+-d prowlarr.mirekng.net \
+-d jellyseerr.mirekng.net \
+-d yt.mirekng.net \
+-d flood.mirekng.net \
+-d dashboard.mirekng.net \
+-d api.mirekng.net
 ```
 
 ## Certbot renew

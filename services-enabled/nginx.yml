@@ -13,7 +13,7 @@ services:
     - ${NGINX_CONFIG_DIR}/proxy_params:/etc/nginx/proxy_params
     - ${NGINX_CONFIG_DIR}/sites-enabled/:/etc/nginx/sites-enabled
     - ${NGINX_CONFIG_DIR}/ssl_common/:/etc/nginx/ssl_common
-    - ${CONFIG_DIR}/nginx/src/:/usr/share/nginx/html
+    - ${CONFIG_DIR}/nginx/:/usr/share/nginx
     - ${CONFIG_DIR}/certbot/www:/var/www/certbot/:ro
     - ${CONFIG_DIR}/certbot/conf/:/etc/nginx/ssl/:ro
     ports:
