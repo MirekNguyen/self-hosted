@@ -25,8 +25,9 @@ sudo docker-compose -f ./services-enabled/certbot.yml --project-dir=. run --rm c
 -d jellyseerr.mirekng.com \
 -d yt.mirekng.com \
 -d flood.mirekng.com \
--d dashboard.mirekng.net \
--d api.mirekng.com
+-d dashboard.mirekng.com \
+-d api.mirekng.com \
+-d event.mirekng.com
 
 sudo docker-compose -f ./services-enabled/certbot.yml --project-dir=. run --rm certbot certonly --force-renewal --webroot --webroot-path /var/www/certbot/ \
 -d mirekng.net \
