@@ -18,6 +18,4 @@ services:
       - ${JELLYFIN_TV_SHOWS_DIR}:/data/tv-shows
       - ${JELLYFIN_MOVIES_DIR}:/data/movies
       - ${JELLYFIN_OTHER_MEDIA_DIR}:/data/other-media
-    ports:
-      - 8096:8096
     restart: unless-stopped

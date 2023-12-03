@@ -12,7 +12,7 @@ services:
   nextcloud_db:
     image: postgres:14
     container_name: nextcloud_db
-    restart: always
+    restart: unless-stopped
     volumes:
       - nextcloud_db:/var/lib/postgresql/data
     environment:
@@ -23,14 +23,12 @@ services:
   redis:
     image: redis
     container_name: redis
-    restart: always
+    restart: unless-stopped
 
   nextcloud:
     image: nextcloud
     container_name: nextcloud
-    restart: always
-    ports:
-      - 8181:80
+    restart: unless-stopped
     links:
       - nextcloud_db
     volumes:

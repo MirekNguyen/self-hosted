@@ -11,8 +11,6 @@ services:
     environment:
       - LOG_LEVEL=debug
       - TZ=${TIMEZONE}
-    ports:
-      - 5055:5055
     volumes:
       - ${CONFIG_DIR}/jellyseerr:/app/config
     restart: unless-stopped

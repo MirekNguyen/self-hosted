@@ -17,6 +17,4 @@ services:
       - ${SONARR_ANIME_DIR}:/anime #optional
       - ${SONARR_TV_SHOWS_DIR}:/tv-shows #optional
       - ${SONARR_DOWNLOAD_DIR}:/downloads #optional
-    ports:
-      - 8989:8989
     restart: unless-stopped

@@ -16,6 +16,4 @@ services:
       - ${CONFIG_DIR}/bazarr:/config
       - ${BAZARR_MOVIES_DIR}:/downloads/movies #optional
       - ${BAZARR_TV_DIR}:/downloads/tv #optional
-    ports:
-      - 6767:6767
     restart: unless-stopped

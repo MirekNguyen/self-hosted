@@ -16,6 +16,4 @@ services:
       - ${CONFIG_DIR}/radarr:/config
       - ${RADARR_MOVIES_DIR}:/movies #optional
       - ${RADARR_DOWNLOAD_DIR}:/downloads #optional
-    ports:
-      - 7878:7878
     restart: unless-stopped

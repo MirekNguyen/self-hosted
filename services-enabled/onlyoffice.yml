@@ -9,8 +9,6 @@ services:
     image: onlyoffice/documentserver:latest
     container_name: onlyoffice
     restart: always
-    ports:
-      - 8182:80
     environment:
       - ${CONFIG_DIR}/onlyoffice/logs:/var/log/onlyoffice
       - ${CONFIG_DIR}/onlyoffice/data:/var/www/onlyoffice/Data
