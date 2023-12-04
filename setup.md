@@ -26,6 +26,7 @@ sudo docker-compose -f ./services-disabled/certbot.yml --project-dir=. run --rm 
 -d yt.mirekng.com \
 -d flood.mirekng.com \
 -d dashboard.mirekng.com \
+-d office.mirekng.com \
 -d api.mirekng.com \
 -d event.mirekng.com \
 -d vpn.mirekng.com \
