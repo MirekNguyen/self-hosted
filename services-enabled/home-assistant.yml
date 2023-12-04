@@ -1,0 +1,17 @@
+version: '3'
+
+networks:
+  default:
+    name: nginx-services
+
+services:
+  home-assistant:
+    container_name: home-assistant
+    image: homeassistant/home-assistant
+    volumes:
+      - ${CONFIG_DIR}/home-assistant:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    restart: unless-stopped
+    ports:
+      - 8123:8123

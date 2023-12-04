@@ -28,7 +28,8 @@ sudo docker-compose -f ./services-disabled/certbot.yml --project-dir=. run --rm 
 -d dashboard.mirekng.com \
 -d api.mirekng.com \
 -d event.mirekng.com \
--d vpn.mirekng.com
+-d vpn.mirekng.com \
+-d home.mirekng.com
 ```
 
 ## Certbot renew
