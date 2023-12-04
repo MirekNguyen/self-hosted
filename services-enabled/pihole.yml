@@ -1,0 +1,20 @@
+version: "3"
+
+networks:
+  default:
+    name: nginx-services
+
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    environment:
+      - TZ=${TIMEZONE}
+      - WEBPASSWORD=${PIHOLE_PASS}
+    volumes:
+      - ${CONFIG_DIR}/pihole/etc-pihole:/etc/pihole
+      - ${CONFIG_DIR}/pihole/etc-dnsmasq.d:/etc/dnsmasq.d
+    restart: unless-stopped
