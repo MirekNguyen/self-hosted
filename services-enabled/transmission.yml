@@ -22,4 +22,7 @@ services:
       - ${TRANSMISSION_DOWNLOAD_DIR}:/downloads
       - ${CONFIG_DIR}/transmission:/config
       # - /path/to/watch/folder:/watch
+    ports:
+      - 51413:51413
+      - 51413:51413/udp
     restart: unless-stopped
