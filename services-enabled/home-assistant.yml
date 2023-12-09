@@ -13,5 +13,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /run/dbus:/run/dbus:ro
     restart: unless-stopped
-    ports:
-      - 8123:8123
+    privileged: yes
+    network_mode: host
+    # ports:
+    #   - 8123:8123
