@@ -32,7 +32,8 @@ sudo docker-compose -f ./services-disabled/certbot.yml --project-dir=. run --rm 
 -d vpn.mirekng.com \
 -d home.mirekng.com \
 -d pihole.mirekng.com \
--d photos.mirekng.com
+-d photos.mirekng.com \
+-d files.mirekng.com
 ```
 
 ## Certbot renew
