@@ -1,0 +1,13 @@
+version: '3'
+
+networks:
+  default:
+    name: nginx-services
+
+services:
+  mirekng:
+    image: mireknguyen/mirekng-homepage
+    container_name: mirekng
+    environment:
+      - NEXT_PUBLIC_MAILER_API=https://mailer.mirekng.com
+    restart: unless-stopped
