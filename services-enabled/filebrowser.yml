@@ -5,6 +5,7 @@ services:
     image: filebrowser/filebrowser
     container_name: filebrowser
     volumes:
-      - ${CONFIG_DIR}/filebrowser/data:/srv
+      - ${CONFIG_DIR}/filebrowser/data:/srv/data
+      - ${NEXTCLOUD_EXT_STORAGE}:/srv/downloads
+      - ${UPLOAD_LOCATION}/library:/srv/photos
       - ${CONFIG_DIR}/filebrowser/filebrowser.db:/database.db
-
