@@ -1,0 +1,27 @@
+version: '3'
+
+networks:
+  default:
+    name: nginx-services
+
+volumes:
+  symfony-api-data:
+
+services:
+  symfony-api:
+    image: mireknguyen/symfony-api
+    container_name: symfony-api
+    restart: unless-stopped
+    depends_on:
+      - symfony-api-db
+  symfony-api-db:
+    image: postgres:${POSTGRES_VERSION:-15}-alpine
+    container_name: symfony-api-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      # You should definitely change the password in production
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+    volumes:
+      - symfony-api-data:/var/lib/postgresql/data:rw
+    restart: unless-stopped
