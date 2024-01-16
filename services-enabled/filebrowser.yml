@@ -9,3 +9,7 @@ services:
       - ${NEXTCLOUD_EXT_STORAGE}:/srv/downloads
       - ${UPLOAD_LOCATION}/library:/srv/photos
       - ${CONFIG_DIR}/filebrowser/filebrowser.db:/database.db
+    healthcheck: 
+      disable: true
+    ports:
+      - 3003:80
