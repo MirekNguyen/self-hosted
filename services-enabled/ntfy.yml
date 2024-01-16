@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  ntfy:
+    image: binwiederhier/ntfy
+    container_name: ntfy
+    command:
+      - serve
+    environment:
+      - TZ=${TIMEZONE}
+      - NTFY_BASE_URL=https://ntfy.mirekng.com
+      - NTFY_AUTH_FILE=/var/lib/ntfy/auth.db
+      - NTFY_CACHE_FILE=/var/lib/ntfy/cache.db
+      - NTFY_ATTACHMENT_CACHE_DIR=/var/cache/ntfy/attachments
+      - NTFY_AUTH_DEFAULT_ACCESS=deny-all
+      - NTFY_UPSTREAM_BASE_URL=https://ntfy.sh
+      - NTFY_BEHIND_PROXY=true
+    volumes:
+      - ${CONFIG_DIR}/ntfy:/var/lib/ntfy
+      # - /var/cache/ntfy:/var/cache/ntfy
+      # - /etc/ntfy:/etc/ntfy
+    restart: unless-stopped
