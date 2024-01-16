@@ -9,31 +9,7 @@ setenforce 0
 ## Cerbot
 
 ```bash
-sudo docker-compose -f ./services-disabled/certbot.yml --project-dir=. run --rm certbot certonly --force-renewal --webroot --webroot-path /var/www/certbot/ \
--d mirekng.com \
--d www.mirekng.com \
--d cloud.mirekng.com \
--d git.mirekng.com \
--d transmission.mirekng.com \
--d moodle.mirekng.com \
--d aria.mirekng.com \
--d tv.mirekng.com \
--d sonarr.mirekng.com \
--d radarr.mirekng.com \
--d bazarr.mirekng.com \
--d prowlarr.mirekng.com \
--d jellyseerr.mirekng.com \
--d yt.mirekng.com \
--d flood.mirekng.com \
--d dashboard.mirekng.com \
--d office.mirekng.com \
--d api.mirekng.com \
--d event.mirekng.com \
--d vpn.mirekng.com \
--d home.mirekng.com \
--d pihole.mirekng.com \
--d photos.mirekng.com \
--d files.mirekng.com
+sudo docker-compose -f ./services-disabled/certbot.yml --project-dir=. run --rm certbot certonly --expand --cert-name mirekng.com --manual --preferred-challenges dns -d mirekng.com -d \*.mirekng.com
 ```
 
 ## Certbot renew
