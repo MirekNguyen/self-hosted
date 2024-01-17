@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+  invidious:
+    image: quay.io/invidious/invidious:latest-arm64 # ARM64/AArch64 devices
+    container_name: invidious
+    environment:
+      # Please read the following file for a comprehensive list of all available
+      # configuration options and their associated syntax:
+      # https://github.com/iv-org/invidious/blob/master/config/config.example.yml
+      INVIDIOUS_CONFIG: |
+        db:
+          dbname: invidious
+          user: kemal
+          password: kemal
+          host: invidious-db
+          port: 5432
+        check_tables: true
+        # external_port:
+        # domain:
+        # https_only: false
+        # statistics_enabled: false
+        hmac_key: "b5b2635b090173e27741dec874bbe518f10b018a"
+    restart: unless-stopped
+    depends_on:
+      - invidious-db
+
+  invidious-db:
+    image: docker.io/library/postgres:14
+    container_name: invidious-db
+    restart: unless-stopped
+    volumes:
+      - invidious-data:/var/lib/postgresql/data
+      - ${CONFIG_DIR}/invidious/config/sql:/config/sql
+      - ${CONFIG_DIR}/invidious/docker/init-invidious-db.sh:/docker-entrypoint-initdb.d/init-invidious-db.sh
+    environment:
+      POSTGRES_DB: invidious
+      POSTGRES_USER: kemal
+      POSTGRES_PASSWORD: kemal
+
+volumes:
+  invidious-data:
