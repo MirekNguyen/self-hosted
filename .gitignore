@@ -1,4 +1,5 @@
 .env
 config
-.values.{yaml,yml}
+values.yml
+values.yaml
 ssl

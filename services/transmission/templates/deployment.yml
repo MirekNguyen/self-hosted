@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transmission-deployment
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: transmission-deployment
+spec:
+  selector:
+    matchLabels:
+      app: transmission-selector
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: transmission-selector
+    spec:
+      containers:
+        - name: transmission
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 9091
+          env:
+            - name: USER
+              value: {{ .Values.env.USER }}
+            - name: PASS
+              value: {{ .Values.env.PASS }}
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+          volumeMounts:
+            - mountPath: /downloads
+              name: media-data
+      volumes:
+        - name: media-data
+          persistentVolumeClaim:
+            claimName: media-pvc
