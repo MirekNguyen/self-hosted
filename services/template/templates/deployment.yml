@@ -24,9 +24,9 @@ spec:
             - name: {{ .Values.env.example.name }}
               value: {{ .Values.env.example.value }}
           volumeMounts:
-            - mountPath: {{ .Values.volumes.data.pvc.mount }}
-              name: {{ .Values.volumes.data.name }}
+            - mountPath: {{ .Values.volumes.config.pvc.mount }}
+              name: {{ .Values.volumes.config.name }}
       volumes:
-        - name: {{ .Values.volumes.data.name }}
+        - name: {{ .Values.volumes.config.name }}
           persistentVolumeClaim:
-            claimName: {{ .Values.volumes.data.pvc.claimName }}
+            claimName: {{ .Values.volumes.config.pvc.claimName }}
