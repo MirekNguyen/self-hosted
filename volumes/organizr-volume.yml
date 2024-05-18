@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: organizr-config-pv
+  labels:
+    app: organizr-pv-selector
+spec:
+  capacity:
+    storage: 1Gi
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/storage/config/organizr"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: organizr-config-pvc
+  namespace: default
+spec:
+  selector: 
+    matchLabels:
+      app: organizr-pv-selector
+  accessModes:
+    - ReadWriteMany
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 1Gi

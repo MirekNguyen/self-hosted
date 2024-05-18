@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jellyfin-config-pv
+  labels:
+    app: jellyfin-pv-selector
+spec:
+  capacity:
+    storage: 1Gi
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/storage/config/jellyfin"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jellyfin-config-pvc
+  namespace: default
+spec:
+  selector: 
+    matchLabels:
+      app: jellyfin-pv-selector
+  accessModes:
+    - ReadWriteMany
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 1Gi

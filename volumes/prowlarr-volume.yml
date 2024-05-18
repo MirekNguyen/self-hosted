@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: prowlarr-config-pv
+  labels:
+    app: prowlarr-pv-selector
+spec:
+  capacity:
+    storage: 1Gi
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/storage/config/prowlarr"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prowlarr-config-pvc
+  namespace: default
+spec:
+  selector: 
+    matchLabels:
+      app: prowlarr-pv-selector
+  accessModes:
+    - ReadWriteMany
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 1Gi
