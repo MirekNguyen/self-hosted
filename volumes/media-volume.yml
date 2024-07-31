@@ -4,12 +4,12 @@ metadata:
   name: media-pv
 spec:
   capacity:
-    storage: 100Gi
+    storage: 1500Gi
   storageClassName: local-storage
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: "/storage/media"
+    path: "/ext-storage/media"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -22,4 +22,4 @@ spec:
   storageClassName: local-storage
   resources:
     requests:
-      storage: 100Gi
+      storage: 1500Gi
