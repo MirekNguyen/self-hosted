@@ -1,0 +1,25 @@
+version: '3'
+
+networks:
+  default:
+    name: nginx-services
+
+volumes:
+  calorie-tracker-data:
+
+services:
+  calorie-tracker-db:
+    image: postgres:16.1-alpine
+    container_name: calorie-tracker-db
+    environment:
+      - POSTGRES_DB=calorie_tracker
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - calorie-tracker-data:/var/lib/postgresql
+    restart: unless-stopped
+
+  calorie-tracker:
+    image: mireknguyen/calorie-tracker:latest
+    container_name: calorie-tracker
+    restart: unless-stopped

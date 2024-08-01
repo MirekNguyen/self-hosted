@@ -1,0 +1,11 @@
+networks:
+  default:
+    name: nginx-services
+
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    volumes:
+      - ${CONFIG_DIR}/uptime-kuma:/app/data
+    restart: unless-stopped

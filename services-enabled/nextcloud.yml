@@ -34,6 +34,7 @@ services:
     volumes:
       - nextcloud:/var/www/html
       - ${NEXTCLOUD_EXT_STORAGE}:/external
+      - ${CONFIG_DIR}/filebrowser/data:/filebrowser
     environment:
       - POSTGRES_DB=${NEXTCLOUD_DB_NAME}
       - POSTGRES_USER=${NEXTCLOUD_DB_USER}

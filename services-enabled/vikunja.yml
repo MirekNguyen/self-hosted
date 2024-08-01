@@ -1,0 +1,43 @@
+version: '3'
+
+networks:
+  default:
+    name: nginx-services
+
+volumes:
+  vikunja-db:
+  vikunja-files:
+
+services:
+  vikunja-api:
+    image: vikunja/api
+    container_name: vikunja-api
+    environment:
+      VIKUNJA_REDIS_ENABLED: 1
+      VIKUNJA_REDIS_HOST: 'redis:6379'
+      VIKUNJA_CACHE_ENABLED: 1
+      VIKUNJA_CACHE_TYPE: redis
+      VIKUNJA_DATABASE_TYPE: postgres
+      VIKUNJA_DATABASE_HOST: db
+      VIKUNJA_DATABASE_PASSWORD: secret
+      VIKUNJA_DATABASE_DATABASE: vikunja
+      VIKUNJA_SERVICE_FRONTENDURL: https://todo.mirekng.com
+      VIKUNJA_SERVICE_ENABLEREGISTRATION: 0
+    volumes:
+      - vikunja-files:/app/vikunja/files
+    restart: unless-stopped
+  vikunja-frontend:
+    container_name: vikunja-frontend
+    image: vikunja/frontend
+    restart: unless-stopped
+  redis:
+    image: redis
+  db:
+    image: postgres:13
+    container_name: vikunja-db
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: vikunja
+    volumes:
+      - vikunja-db:/var/lib/postgresql/data
+    restart: unless-stopped

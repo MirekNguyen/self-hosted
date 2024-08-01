@@ -1,5 +1,7 @@
 version: '3'
 
+volume
+
 networks:
   default:
     name: nginx-services

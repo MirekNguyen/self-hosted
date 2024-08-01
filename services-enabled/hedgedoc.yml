@@ -1,0 +1,41 @@
+version: '3'
+
+networks:
+  default:
+    name: nginx-services
+
+services:
+  hedgedoc-db:
+    image: postgres:13.4-alpine
+    container_name: hedgedoc-db
+    environment:
+      - POSTGRES_USER=hedgedoc
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=hedgedoc
+    volumes:
+      - hedgedoc-database:/var/lib/postgresql/data
+    restart: always
+
+  hedgedoc:
+    image: quay.io/hedgedoc/hedgedoc:latest
+    container_name: hedgedoc
+    environment:
+      - NODE_ENV=production
+      - CMD_DB_URL=postgres://hedgedoc:password@hedgedoc-db:5432/hedgedoc
+      - CMD_DOMAIN=notes.mirekng.com
+      - CMD_URL_ADDPORT=false
+      - CMD_PROTOCOL_USESSL=true
+      - CMD_ALLOW_EMAIL_REGISTER=false
+      - CMD_ALLOW_ANONYMOUS=false
+      - CMD_ALLOW_ANONYMOUS_EDITS=false
+      - CMD_DEFAULT_PERMISSION=private
+
+    volumes:
+      - hedgedoc-uploads:/hedgedoc/public/uploads
+    restart: always
+    depends_on:
+      - hedgedoc-db
+volumes:
+  hedgedoc-database:
+  hedgedoc-uploads:
+

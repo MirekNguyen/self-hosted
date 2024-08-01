@@ -1,0 +1,13 @@
+version: '3'
+
+networks:
+  default:
+    name: nginx-services
+
+services:
+  organizr:
+    image: organizr/organizr
+    container_name: organizr
+    volumes:
+      - ${CONFIG_DIR}/organizr/:/config
+    restart: unless-stopped

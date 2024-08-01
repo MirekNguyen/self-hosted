@@ -13,3 +13,4 @@ services:
       disable: true
     ports:
       - 3003:80
+    restart: unless-stopped

@@ -24,3 +24,4 @@ services:
     - NGINX_PORT=80
     # links:
     #   - php-fpm
+    restart: unless-stopped

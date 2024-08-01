@@ -1,0 +1,13 @@
+version: '3'
+
+networks:
+  default:
+    name: nginx-services
+
+services:
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - TZ=${TIMEZONE}
+    restart: unless-stopped

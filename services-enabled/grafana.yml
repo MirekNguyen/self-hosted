@@ -47,23 +47,26 @@ services:
 
   cadvisor:
     container_name: cadvisor
-    image: zcube/cadvisor
+    # image: zcube/cadvisor
+    image: gcr.io/cadvisor/cadvisor-arm64:v0.45.0
     volumes: 
       - /:/rootfs:ro
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
-      # - /etc/machine-id:/etc/machine-id:ro
+      - /etc/machine-id:/etc/machine-id:ro
     privileged: true
     command:
       - "--docker_only=true"
       - "--housekeeping_interval=120s"
-      - "--disable_metrics=accelerator,cpu_topology,disk,memory_numa,tcp,udp,percpu,sched,process,hugetlb,referenced_memory,resctrl,cpuset,advtcp"
+      - "--disable_metrics=cpu_topology,disk,memory_numa,tcp,udp,percpu,sched,process,hugetlb,referenced_memory,resctrl,cpuset,advtcp"
+      # - "--disable_metrics=accelerator,cpu_topology,disk,memory_numa,tcp,udp,percpu,sched,process,hugetlb,referenced_memory,resctrl,cpuset,advtcp"
       - '--store_container_labels=false'
       - '--whitelisted_container_labels=org.label-schema.group,com.docker.compose.project,com.docker.compose.service'
     devices: 
       - "/dev/kmsg"
+    restart: unless-stopped
 
   node-exporter:
     image: prom/node-exporter:latest

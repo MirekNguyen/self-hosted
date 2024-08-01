@@ -4,8 +4,49 @@ yml_directory="/home/binh/self-hosted/services-enabled"
 project_directory="/home/binh/self-hosted/"
 
 yml_files=()
+enabled_services=(
+  "gitea.yml"
+  "grafana.yml"
+  "immich.yml"
+  "mailer.yml"
+  "nginx.yml"
+  "ntfy.yml"
+  "wireguard.yml"
+  "syncthing.yml"
+  "uptime-kuma.yml"
+)
+disabled_services=(
+  "aria.yml"
+  "bazarr.yml"
+  "dozzle.yml"
+  "flaresolverr.yml"
+  "flood.yml"
+  "hedgedoc.yml"
+  "jellyfin.yml"
+  "jellyseerr.yml"
+  "libreddit.yml"
+  "organizr.yml"
+  "prowlarr.yml"
+  "radarr.yml"
+  "sonarr.yml"
+  "vikunja.yml"
+  "transmission.yml"
+  "calorie-tracker.yml"
+  "mirekng.yml"
+  "nexus.yml"
+  "symfony-api.yml"
+  "event-manager.yml"
+  "nextcloud.yml"
+  "freshrss.yml"
+  "homer.yml"
+  "pihole.yml"
+  "home-assistant.yml"
+  "filebrowser.yml"
+  "php-fpm.yml"
+);
 
-for file in "$yml_directory"/*.yml; do
+for service in "${enabled_services[@]}"; do
+    file="$yml_directory/$service"
     if [ -f "$file" ]; then
         yml_files+=("-f $file")
     fi

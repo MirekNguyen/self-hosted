@@ -1,0 +1,15 @@
+version: '3'
+
+volumes:
+  nexus-data:
+
+networks:
+  default:
+    name: nginx-services
+
+services:
+  nexus:
+    image: sonatype/nexus3
+    container_name: nexus
+    volumes:
+      - "nexus-data:/nexus-data"
