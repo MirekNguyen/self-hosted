@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: calorie-tracker
-          image: mireknguyen/calorie-tracker:1.0.1
+          image: mireknguyen/calorie-tracker:1.0.2
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
