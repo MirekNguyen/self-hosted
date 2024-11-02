@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: calories-db-pv
+  labels:
+    app: calories-pv-selector
+spec:
+  capacity:
+    storage: 3Gi
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/storage/config/calories"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: calories-db-pvc
+  namespace: default
+spec:
+  selector: 
+    matchLabels:
+      app: calories-pv-selector
+  accessModes:
+    - ReadWriteMany
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 1Gi
