@@ -1,22 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: mirekng
+  name: calorie-tracker
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/MirekNguyen/self-hosted
     targetRevision: kubernetes
-    path: services/mirekng
+    path: charts/calorie-tracker
     helm:
       valuesObject:
         replicas: 1
         namespace: default
-        appName: mirekng
+        appName: calorie-tracker
 
         image:
-          repository: mireknguyen/mirekng-homepage 
+          repository: mireknguyen/calorie-tracker
           tag: latest
 
         ports:
@@ -25,12 +25,19 @@ spec:
 
         ingress:
           host: mirekng.com
+          hostPrefix: calories
           sslSecretName: ssl-certificate
 
-        env:
-          mailer:
-            name: NEXT_PUBLIC_MAILER_API
-            value: ''
+        database:
+          secretName: calorie-tracker-database
+          tag: 16.1
+
+        volumes:
+          db:
+            name: calories-data
+            pvc:
+              mount: /var/lib/postgresql/data
+              claimName: calories-db-pvc
   destination:
     server: https://kubernetes.default.svc
     namespace: default
@@ -38,3 +45,4 @@ spec:
     automated:
       prune: true
       selfHeal: true
+

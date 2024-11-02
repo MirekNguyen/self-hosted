@@ -1,43 +1,44 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: calorie-tracker
+  name: sonarr
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/MirekNguyen/self-hosted
     targetRevision: kubernetes
-    path: services/calorie-tracker
+    path: charts/sonarr
     helm:
       valuesObject:
         replicas: 1
         namespace: default
-        appName: calorie-tracker
+        appName: sonarr
 
         image:
-          repository: mireknguyen/calorie-tracker
+          repository: linuxserver/sonarr
           tag: latest
 
         ports:
-          containerPort: 3000
-          servicePort: 3000
+          containerPort: 8989
+          servicePort: 8989
 
         ingress:
           host: mirekng.com
-          hostPrefix: calories
+          hostPrefix: sonarr
           sslSecretName: ssl-certificate
 
-        database:
-          secretName: calorie-tracker-database
-          tag: 16.1
-
         volumes:
-          db:
-            name: calories-data
+          config:
+            name: config-data
             pvc:
-              mount: /var/lib/postgresql/data
-              claimName: calories-db-pvc
+              mount: /config
+              claimName: sonarr-config-pvc
+          media:
+            name: media-data
+            pvc:
+              mount: /downloads
+              claimName: media-pvc
   destination:
     server: https://kubernetes.default.svc
     namespace: default

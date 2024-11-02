@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/MirekNguyen/self-hosted
     targetRevision: kubernetes
-    path: services/freshrss
+    path: charts/freshrss
     helm:
       valuesObject:
         replicas: 1

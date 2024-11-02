@@ -1,39 +1,44 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: jellyseerr
+  name: filebrowser
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/MirekNguyen/self-hosted
     targetRevision: kubernetes
-    path: services/jellyseerr
+    path: charts/filebrowser
     helm:
       valuesObject:
         replicas: 1
         namespace: default
-        appName: jellyseerr
+        appName: filebrowser
 
         image:
-          repository: fallenbagel/jellyseerr
+          repository: filebrowser/filebrowser
           tag: latest
 
         ports:
-          containerPort: 5055
-          servicePort: 5055
+          containerPort: 80
+          servicePort: 80
 
         ingress:
           host: mirekng.com
-          hostPrefix: jellyseerr
+          hostPrefix: files
           sslSecretName: ssl-certificate
 
         volumes:
-          config:
-            name: jellyseerr-config
+          db:
+            name: filebrowser-db
             pvc:
-              mount: /app/config
-              claimName: jellyseerr-config-pvc
+              mount: /database.db
+              claimName: filebrowser-db-pvc
+          documents:
+            name: documents
+            pvc:
+              mount: /srv
+              claimName: documents-pvc
   destination:
     server: https://kubernetes.default.svc
     namespace: default

@@ -1,31 +1,31 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: organizr
+  name: jellyfin
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/MirekNguyen/self-hosted
     targetRevision: kubernetes
-    path: services/organizr
+    path: charts/jellyfin
     helm:
       valuesObject:
         replicas: 1
         namespace: default
-        appName: organizr
+        appName: jellyfin
 
         image:
-          repository: organizr/organizr
+          repository: linuxserver/jellyfin
           tag: latest
 
         ports:
-          containerPort: 80
-          servicePort: 80
+          containerPort: 8096
+          servicePort: 8096
 
         ingress:
           host: mirekng.com
-          hostPrefix: organizr
+          hostPrefix: tv
           sslSecretName: ssl-certificate
 
         volumes:
@@ -33,7 +33,12 @@ spec:
             name: config-data
             pvc:
               mount: /config
-              claimName: organizr-config-pvc
+              claimName: jellyfin-config-pvc
+          media:
+            name: media-data
+            pvc:
+              mount: /downloads
+              claimName: media-pvc
   destination:
     server: https://kubernetes.default.svc
     namespace: default
@@ -41,3 +46,4 @@ spec:
     automated:
       prune: true
       selfHeal: true
+

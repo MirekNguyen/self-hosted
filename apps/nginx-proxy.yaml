@@ -1,44 +1,34 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: jellyfin
+  name: nginx-proxy
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/MirekNguyen/self-hosted
     targetRevision: kubernetes
-    path: services/jellyfin
+    path: charts/nginx-proxy
     helm:
       valuesObject:
         replicas: 1
         namespace: default
-        appName: jellyfin
+        appName: nginx-proxy
 
         image:
-          repository: linuxserver/jellyfin
-          tag: latest
+          repository: nginx
+          tag: stable
 
         ports:
-          containerPort: 8096
-          servicePort: 8096
+          containerPort: 80
+          servicePort: 80
 
         ingress:
           host: mirekng.com
-          hostPrefix: tv
+          hostPrefixes:
+            - hostPrefix: crm
+            - hostPrefix: notes
           sslSecretName: ssl-certificate
-
-        volumes:
-          config:
-            name: config-data
-            pvc:
-              mount: /config
-              claimName: jellyfin-config-pvc
-          media:
-            name: media-data
-            pvc:
-              mount: /downloads
-              claimName: media-pvc
   destination:
     server: https://kubernetes.default.svc
     namespace: default

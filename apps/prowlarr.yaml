@@ -1,31 +1,31 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: radarr
+  name: prowlarr
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/MirekNguyen/self-hosted
     targetRevision: kubernetes
-    path: services/radarr
+    path: charts/prowlarr
     helm:
       valuesObject:
         replicas: 1
         namespace: default
-        appName: radarr
+        appName: prowlarr
 
         image:
-          repository: linuxserver/radarr
+          repository: linuxserver/prowlarr
           tag: latest
 
         ports:
-          containerPort: 7878
-          servicePort: 7878
+          containerPort: 9696
+          servicePort: 9696
 
         ingress:
           host: mirekng.com
-          hostPrefix: radarr
+          hostPrefix: prowlarr
           sslSecretName: ssl-certificate
 
         volumes:
@@ -33,12 +33,7 @@ spec:
             name: config-data
             pvc:
               mount: /config
-              claimName: radarr-config-pvc
-          media:
-            name: media-data
-            pvc:
-              mount: /downloads
-              claimName: media-pvc
+              claimName: prowlarr-config-pvc
   destination:
     server: https://kubernetes.default.svc
     namespace: default

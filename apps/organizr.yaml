@@ -1,31 +1,31 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: sonarr
+  name: organizr
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/MirekNguyen/self-hosted
     targetRevision: kubernetes
-    path: services/sonarr
+    path: charts/organizr
     helm:
       valuesObject:
         replicas: 1
         namespace: default
-        appName: sonarr
+        appName: organizr
 
         image:
-          repository: linuxserver/sonarr
+          repository: organizr/organizr
           tag: latest
 
         ports:
-          containerPort: 8989
-          servicePort: 8989
+          containerPort: 80
+          servicePort: 80
 
         ingress:
           host: mirekng.com
-          hostPrefix: sonarr
+          hostPrefix: organizr
           sslSecretName: ssl-certificate
 
         volumes:
@@ -33,12 +33,7 @@ spec:
             name: config-data
             pvc:
               mount: /config
-              claimName: sonarr-config-pvc
-          media:
-            name: media-data
-            pvc:
-              mount: /downloads
-              claimName: media-pvc
+              claimName: organizr-config-pvc
   destination:
     server: https://kubernetes.default.svc
     namespace: default
@@ -46,4 +41,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-

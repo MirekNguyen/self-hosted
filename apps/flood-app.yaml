@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/MirekNguyen/self-hosted  # Your Git repository URL.
     targetRevision: kubernetes                           # The branch where the configuration exists, e.g., 'kubernetes'.
-    path: services/flood                                 # The folder where Helm chart (and values.yaml) are located.
+    path: charts/flood                                 # The folder where Helm chart (and values.yaml) are located.
     helm:
       valuesObject:
         image:

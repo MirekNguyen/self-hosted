@@ -1,38 +1,32 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: transmission
+  name: flaresolverr
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/MirekNguyen/self-hosted
     targetRevision: kubernetes
-    path: services/transmission
+    path: charts/flaresolverr
     helm:
       valuesObject:
         replicas: 1
         namespace: default
-        appName: transmission
+        appName: flaresolverr
 
         image:
-          repository: linuxserver/transmission
+          repository: ghcr.io/flaresolverr/flaresolverr
           tag: latest
 
-        credentials:
-          secretName: transmission-credentials
+        ports:
+          containerPort: 8191
+          servicePort: 8191
 
         ingress:
           host: mirekng.com
-          hostPrefix: transmission
+          hostPrefix: flaresolverr
           sslSecretName: ssl-certificate
-
-        volumes:
-          media:
-            name: media-data
-            pvc:
-              mount: /downloads
-              claimName: media-pvc
   destination:
     server: https://kubernetes.default.svc
     namespace: default
@@ -40,4 +34,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-
