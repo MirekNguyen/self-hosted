@@ -2,4 +2,4 @@
 config
 values.yml
 values.yaml
-ssl
+secrets
