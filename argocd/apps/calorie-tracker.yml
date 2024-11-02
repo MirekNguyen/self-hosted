@@ -27,6 +27,17 @@ spec:
           host: mirekng.com
           hostPrefix: calories
           sslSecretName: ssl-certificate
+
+        database:
+          secretName: calorie-tracker-database
+          tag: 16.1
+
+        volumes:
+          db:
+            name: calories-data
+            pvc:
+              mount: /var/lib/postgresql/data
+              claimName: calories-db-pvc
   destination:
     server: https://kubernetes.default.svc
     namespace: default
