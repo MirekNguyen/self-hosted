@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jellyseerr
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MirekNguyen/self-hosted
+    targetRevision: kubernetes
+    path: services/jellyseerr
+    helm:
+      valuesObject:
+        replicas: 1
+        namespace: default
+        appName: jellyseerr
+
+        image:
+          repository: fallenbagel/jellyseerr
+          tag: latest
+
+        ports:
+          containerPort: 5055
+          servicePort: 5055
+
+        ingress:
+          host: mirekng.com
+          hostPrefix: jellyseerr
+          sslSecretName: ssl-certificate
+
+        volumes:
+          config:
+            name: jellyseerr-config
+            pvc:
+              mount: /app/config
+              claimName: jellyseerr-config-pvc
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
