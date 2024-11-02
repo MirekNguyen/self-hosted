@@ -3,4 +3,3 @@ config
 values.yml
 values.yaml
 ssl
-!/services/flood/values.yaml
