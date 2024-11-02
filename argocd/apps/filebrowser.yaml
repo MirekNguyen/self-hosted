@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: filebrowser
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MirekNguyen/self-hosted
+    targetRevision: kubernetes
+    path: services/filebrowser
+    helm:
+      valuesObject:
+        replicas: 1
+        namespace: default
+        appName: filebrowser
+
+        image:
+          repository: filebrowser/filebrowser
+          tag: latest
+
+        ports:
+          containerPort: 80
+          servicePort: 80
+
+        ingress:
+          host: mirekng.com
+          hostPrefix: files
+          sslSecretName: ssl-certificate
+
+        volumes:
+          db:
+            name: filebrowser-db
+            pvc:
+              mount: /database.db
+              claimName: filebrowser-db-pvc
+          documents:
+            name: documents
+            pvc:
+              mount: /srv
+              claimName: documents-pvc
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
