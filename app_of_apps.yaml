@@ -16,7 +16,7 @@ spec:
       selfHeal: true
   source:
     repoURL: https://github.com/MirekNguyen/self-hosted.git
-    path: apps
+    path: argocd/apps
     targetRevision: kubernetes
     directory:
       recurse: true
