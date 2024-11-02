@@ -23,9 +23,15 @@ spec:
             - containerPort: 51413
           env:
             - name: USER
-              value: {{ .Values.env.USER }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.secretName }}
+                  key: USER
             - name: PASS
-              value: {{ .Values.env.PASS }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.credentials.secretName }}
+                  key: PASS
             - name: PUID
               value: "1000"
             - name: PGID
