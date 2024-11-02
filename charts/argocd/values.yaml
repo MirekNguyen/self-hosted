@@ -1,7 +1,0 @@
-namespace: argocd
-appName: argocd
-
-ingress:
-  host: mirekng.com
-  hostPrefix: argocd
-  sslSecretName: ssl-certificate
