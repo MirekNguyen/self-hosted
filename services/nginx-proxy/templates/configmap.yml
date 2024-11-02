@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-proxy-config
+data:
+  nginx.conf: |
+    user  nginx;
+    worker_processes  1;
+    error_log  /var/log/nginx/error.log warn;
+    pid        /var/run/nginx.pid;
+    events {
+        worker_connections  1024;
+    }
+    http {
+        sendfile        on;
+        keepalive_timeout  65;
+        server {
+            listen       80;
+            server_name  crm.mirekng.com;
+            location / {
+                proxy_pass https://crm.mirekng.com:444;
+            }
+            error_page   500 502 503 504  /50x.html;
+            location = /50x.html {
+                root   /usr/share/nginx/html;
+            }
+        }
+        server {
+            listen       80;
+            server_name  notes.mirekng.com;
+            location / {
+                proxy_pass https://notes.mirekng.com:444;
+            }
+            error_page   500 502 503 504  /50x.html;
+            location = /50x.html {
+                root   /usr/share/nginx/html;
+            }
+        }
+    }
+
