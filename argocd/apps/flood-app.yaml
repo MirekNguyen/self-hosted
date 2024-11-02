@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: flood
+  namespace: argocd      # This must match where you've installed Argo CD. Normally it's the "argocd" namespace.
+spec:
+  project: default       # Set the project that this app should belong to
+
+  source:
+    repoURL: https://github.com/MirekNguyen/self-hosted  # Your Git repository URL.
+    targetRevision: kubernetes                           # The branch where the configuration exists, e.g., 'kubernetes'.
+    path: services/flood                                 # The folder where Helm chart (and values.yaml) are located.
+
+  destination:
+    server: https://kubernetes.default.svc               # Use Kubernetes default API server
+    namespace: default                           # Specify the namespace you want to deploy into
+
+  syncPolicy:
+    automated:        # Automatically deploy updates whenever the Git repo changes
+      prune: true     # Automatically delete resources that are no longer in the Git repository
+      selfHeal: true  # Automatically fix cluster drift
