@@ -10,6 +10,14 @@ spec:
     repoURL: https://github.com/MirekNguyen/self-hosted  # Your Git repository URL.
     targetRevision: kubernetes                           # The branch where the configuration exists, e.g., 'kubernetes'.
     path: services/flood                                 # The folder where Helm chart (and values.yaml) are located.
+    helm:
+      valuesObject:
+        image:
+          tag: latest
+        ingress:
+          host: mirekng.com
+          hostPrefix: flood
+          sslSecretName: ssl-certificate
 
   destination:
     server: https://kubernetes.default.svc               # Use Kubernetes default API server
