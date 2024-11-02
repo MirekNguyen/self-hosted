@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jellyfin
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MirekNguyen/self-hosted
+    targetRevision: kubernetes
+    path: services/jellyfin
+    helm:
+      valuesObject:
+        replicas: 1
+        namespace: default
+        appName: jellyfin
+
+        image:
+          repository: linuxserver/jellyfin
+          tag: latest
+
+        ports:
+          containerPort: 8096
+          servicePort: 8096
+
+        ingress:
+          host: mirekng.com
+          hostPrefix: tv
+          sslSecretName: ssl-certificate
+
+        volumes:
+          config:
+            name: config-data
+            pvc:
+              mount: /config
+              claimName: jellyfin-config-pvc
+          media:
+            name: media-data
+            pvc:
+              mount: /downloads
+              claimName: media-pvc
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
