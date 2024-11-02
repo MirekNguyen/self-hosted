@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: "{{ .Values.appName }}-db"
+spec:
+  serviceName: "{{ .Values.appName }}-db"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "{{ .Values.appName }}-db"
+  template:
+    metadata:
+      labels:
+        app: "{{ .Values.appName }}-db"
+    spec:
+      containers:
+        - name: "{{ .Values.appName }}-db"
+          image: "postgres:{{ .Values.database.tag }}"
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.secretName }}
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.secretName }}
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.secretName }}
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - mountPath: {{ .Values.volumes.db.pvc.mount }}
+              name: {{ .Values.volumes.db.name }}
+      volumes:
+        - name: {{ .Values.volumes.db.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.volumes.db.pvc.claimName }}
