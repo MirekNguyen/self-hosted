@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sonarr
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MirekNguyen/self-hosted
+    targetRevision: kubernetes
+    path: services/sonarr
+    helm:
+      valuesObject:
+        replicas: 1
+        namespace: default
+        appName: sonarr
+
+        image:
+          repository: linuxserver/sonarr
+          tag: latest
+
+        ports:
+          containerPort: 8989
+          servicePort: 8989
+
+        ingress:
+          host: mirekng.com
+          hostPrefix: sonarr
+          sslSecretName: ssl-certificate
+
+        volumes:
+          config:
+            name: config-data
+            pvc:
+              mount: /config
+              claimName: sonarr-config-pvc
+          media:
+            name: media-data
+            pvc:
+              mount: /downloads
+              claimName: media-pvc
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
