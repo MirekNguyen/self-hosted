@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: transmission-ingress
+  name: "{{ .Values.appName }}-ingress"
   namespace: {{ .Values.namespace }}
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
@@ -9,7 +9,7 @@ spec:
   tls:
   - hosts:
     - {{ .Values.ingress.host }}
-    secretName: ssl-certificate
+    secretName: {{ .Values.ingress.sslSecretName }}
   rules:
   - host: "{{ .Values.ingress.hostPrefix }}.{{ .Values.ingress.host }}"
     http:
@@ -18,6 +18,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: transmission-service
+            name: "{{ .Values.appName }}-service"
             port:
-              number: 9091
+              number: {{ .Values.ports.servicePort }}

@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: transmission-deployment
+  name: "{{ .Values.appName }}-deployment"
   namespace: {{ .Values.namespace }}
   labels:
-    app: transmission-deployment
+    app: "{{ .Values.appName }}-deployment"
 spec:
   selector:
     matchLabels:
-      app: transmission-selector
-  replicas: 1
+      app: "{{ .Values.appName }}-selector"
+  replicas: {{ .Values.replicas }}
   template:
     metadata:
       labels:
-        app: transmission-selector
+        app: "{{ .Values.appName }}-selector"
     spec:
       containers:
-        - name: transmission
+        - name: {{ .Values.appName }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
-            - containerPort: 9091
+            - containerPort: {{ .Values.ports.containerPort }}
           env:
             - name: USER
               value: {{ .Values.env.USER }}
@@ -30,9 +30,9 @@ spec:
             - name: PGID
               value: "1000"
           volumeMounts:
-            - mountPath: /downloads
-              name: media-data
+            - mountPath: {{ .Values.volumes.media.pvc.mount }}
+              name: {{ .Values.volumes.media.name }}
       volumes:
-        - name: media-data
+        - name: {{ .Values.volumes.media.name }}
           persistentVolumeClaim:
-            claimName: media-pvc
+            claimName: {{ .Values.volumes.media.pvc.claimName }}
