@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: media-rss-tracker
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MirekNguyen/self-hosted
+    targetRevision: kubernetes
+    path: charts/media-rss-tracker
+    helm:
+      valuesObject:
+        namespace: default
+        appName: media-rss-tracker
+        schedule: "0 0 * * *"
+
+        image:
+          repository: mireknguyen/media-rss-tracker
+          tag: latest
+
+        host: mirekng.com
+        media-type: movies
+
+        volumes:
+          rss:
+            name: rss-volume
+            pvc:
+              mount: /app/public
+              claimName: rss-pvc
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+

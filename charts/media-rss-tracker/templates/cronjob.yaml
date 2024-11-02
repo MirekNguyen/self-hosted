@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "{{ .Values.appName }}-cronjob"
+spec:
+  schedule: "{{ .Values.schedule }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: {{ .Values.appName }}
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: MEDIA_TYPE
+              value: {{ .Values.media-type }}
+            - name: HOST
+              value: {{ .Values.host }}
+            volumeMounts:
+            - name: {{ .Values.volumes.rss.name }}
+              mountPath: {{ .Values.volumes.rss.pvc.mount }}
+          restartPolicy: OnFailure
+          volumes:
+          - name: {{ .Values.volumes.rss.name }}
+            persistentVolumeClaim:
+              claimName: {{ .Values.volumes.rss.pvc.claimName }}
