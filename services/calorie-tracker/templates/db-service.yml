@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   selector:
-    app: "{{ .Values.appName }}-db"
+    app: "{{ .Values.appName }}-db-selector"
   ports:
     - protocol: TCP
       targetPort: 5432
