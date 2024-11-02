@@ -14,7 +14,7 @@ spec:
             imagePullPolicy: IfNotPresent
             env:
             - name: MEDIA_TYPE
-              value: {{ .Values.media-type }}
+              value: "{{ .Values.mediatype }}"
             - name: HOST
               value: {{ .Values.host }}
             volumeMounts:

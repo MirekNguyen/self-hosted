@@ -20,7 +20,7 @@ spec:
           tag: latest
 
         host: mirekng.com
-        media-type: movies
+        mediatype: movies
 
         volumes:
           rss:
