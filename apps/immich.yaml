@@ -8,13 +8,19 @@ spec:
   source:
     repoURL: https://immich-app.github.io/immich-charts
     chart: immich
-    targetRevision: 0.8.4
+    targetRevision: 0.8.1
     helm:
       valuesObject:
         immich:
           persistence:
             library:
               existingClaim: photos-pvc
+        postgresql:
+          enabled: true
+        redis:
+          enabled: true
+        machine-learning:
+          enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: default
