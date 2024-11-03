@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: wireguard-config-pv
+  labels:
+    app: wireguard-pv-selector
+spec:
+  capacity:
+    storage: 1Gi
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/storage/config/wireguard"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wireguard-config-pvc
+  namespace: default
+spec:
+  selector: 
+    matchLabels:
+      app: wireguard-pv-selector
+  accessModes:
+    - ReadWriteMany
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 1Gi
