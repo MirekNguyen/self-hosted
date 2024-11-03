@@ -38,6 +38,9 @@ spec:
             - mountPath: {{ .Values.volumes.config.pvc.mount }}
               name: {{ .Values.volumes.config.name }}
       volumes:
+        - name: {{ .Values.volumes.media.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.volumes.media.pvc.claimName }}
         - name: {{ .Values.volumes.config.name }}
           persistentVolumeClaim:
             claimName: {{ .Values.volumes.config.pvc.claimName }}
