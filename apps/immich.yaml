@@ -27,6 +27,8 @@ spec:
                   secretName: ssl-certificate
         postgresql:
           enabled: true
+          primary:
+            resourcePreset: large
         redis:
           enabled: true
         machine-learning:
