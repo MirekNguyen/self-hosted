@@ -7,5 +7,11 @@ spec:
   selector:
     app: "{{ .Values.appName }}-selector"
   ports:
-    - port: 51820
+    - protocol: TCP
+      name: vpn-tcp
       targetPort: 51820
+      port: 51820
+    - protocol: UDP
+      name: vpn-udp
+      targetPort: 51820
+      port: 51820
