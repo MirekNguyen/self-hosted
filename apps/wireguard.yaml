@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: wireguard
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MirekNguyen/self-hosted
+    targetRevision: kubernetes
+    path: charts/wireguard
+    helm:
+      valuesObject:
+        replicas: 1
+        namespace: default
+        appName: wireguard
+
+        image:
+          repository: weejewel/wg-easy
+          tag: latest
+
+        ports:
+          containerPort: 51821
+          servicePort: 51821
+
+        ingress:
+          host: mirekng.com
+          hostPrefix: vpn
+          sslSecretName: ssl-certificate
+
+        volumes:
+          config:
+            name: config-data
+            pvc:
+              mount: /config
+              claimName: wireguard-config-pvc
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

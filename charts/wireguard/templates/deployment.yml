@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Values.appName }}-deployment"
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: "{{ .Values.appName }}-deployment"
+spec:
+  selector:
+    matchLabels:
+      app: "{{ .Values.appName }}-selector"
+  replicas: {{ .Values.replicas }}
+  template:
+    metadata:
+      labels:
+        app: "{{ .Values.appName }}-selector"
+    spec:
+      containers:
+        - name: {{ .Values.appName }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.ports.containerPort }}
+          env:
+            - name: WG_HOST
+              value: {{ .Values.ingress.host }}
+            - name: PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: wireguard-secret
+                  key: WG_PASS
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+                - SYS_MODULE
+          sysctls:
+            - name: net.ipv4.conf.all.src_valid_mark
+              value: "1"
+            - name: net.ipv4.ip_forward
+              value: "1"
+          volumeMounts:
+            - mountPath: {{ .Values.volumes.config.pvc.mount }}
+              name: {{ .Values.volumes.config.name }}
+      volumes:
+        - name: {{ .Values.volumes.config.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.volumes.config.pvc.claimName }}
