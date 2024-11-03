@@ -25,6 +25,8 @@ spec:
                 - hosts:
                   - mirekng.com
                   secretName: ssl-certificate
+                  paths:
+                    - path: "/"
         postgresql:
           enabled: true
           primary:
