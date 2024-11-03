@@ -15,18 +15,18 @@ spec:
           persistence:
             library:
               existingClaim: photos-pvc
-        server:
-          ingress:
-            main:
-              enabled: true
-              hosts:
-                - host: photos.mirekng.com
-              tls:
-                - hosts:
-                  - mirekng.com
-                  secretName: ssl-certificate
-                  paths:
-                    - path: "/"
+        # server:
+        #   ingress:
+        #     main:
+        #       enabled: true
+        #       hosts:
+        #         - host: photos.mirekng.com
+        #       tls:
+        #         - hosts:
+        #           - mirekng.com
+        #           secretName: ssl-certificate
+        #           paths:
+        #             - path: "/"
         postgresql:
           enabled: true
           primary:
