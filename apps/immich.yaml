@@ -21,12 +21,12 @@ spec:
               enabled: true
               hosts:
                 - host: photos.mirekng.com
+                  paths:
+                    - path: "/"
               tls:
                 - hosts:
                   - mirekng.com
                   secretName: ssl-certificate
-                  paths:
-                    - path: "/"
         postgresql:
           enabled: true
           primary:
