@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.appName }}-service"
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: "{{ .Values.appName }}-selector"
+  ports:
+    - protocol: TCP
+      name: web-interface
+      targetPort: 8080
+      port: 8080
+    - protocol: TCP
+      name: torrent-tcp
+      targetPort: 6881
+      port: 6881
+    - protocol: UDP
+      name: torrent-udp
+      targetPort: 6881
+      port: 6881
