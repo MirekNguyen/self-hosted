@@ -11,6 +11,16 @@ spec:
     path: charts/librechat
     helm:
       valuesObject:
+        ingress:
+          enabled: true
+          hosts:
+            - host: librechat.mirekng.com
+              paths:
+                - path: "/"
+          tls:
+            - hosts:
+              - mirekng.com
+              secretName: ssl-certificate
         mongodb:
           image:
             registry: ghcr.io
