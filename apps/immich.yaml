@@ -11,6 +11,8 @@ spec:
     targetRevision: 0.8.4
     helm:
       valuesObject:
+        env:
+          DB_SKIP_MIGRATIONS: true
         immich:
           persistence:
             library:
