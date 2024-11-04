@@ -9,6 +9,13 @@ spec:
     repoURL: https://github.com/bat-bs/helm-charts.git
     targetRevision: main
     path: charts/librechat
+    helm:
+      valuesObject:
+        mongodb:
+          image:
+            registry: ghcr.io
+            repository: xavidop/mongodb
+            tag: '7.0'
   destination:
     server: https://kubernetes.default.svc
     namespace: default
