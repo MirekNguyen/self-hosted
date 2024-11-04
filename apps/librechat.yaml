@@ -11,8 +11,8 @@ spec:
     path: charts/librechat
     helm:
       valuesObject:
-        config:
-          env:
+        librechat:
+          configEnv:
             ALLOW_REGISTRATION: "true"
             ALLOW_SOCIAL_LOGIN: "true"
             ALLOW_SOCIAL_REGISTRATION: "true"
