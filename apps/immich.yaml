@@ -33,6 +33,8 @@ spec:
             resourcePreset: large
             persistence:
               existingClaim: immich-db-pvc
+          volumePermissions:
+            enabled: true
         redis:
           enabled: true
         machine-learning:
