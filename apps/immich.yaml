@@ -31,6 +31,8 @@ spec:
           enabled: true
           primary:
             resourcePreset: large
+            persistence:
+              existingClaim: immich-db-pvc
         redis:
           enabled: true
         machine-learning:
