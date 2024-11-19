@@ -6,14 +6,8 @@ project_directory="/home/binh/self-hosted/"
 yml_files=()
 enabled_services=(
   "gitea.yml"
-  "grafana.yml"
   "immich.yml"
-  "mailer.yml"
   "nginx.yml"
-  "ntfy.yml"
-  "wireguard.yml"
-  "syncthing.yml"
-  "uptime-kuma.yml"
 )
 disabled_services=(
   "aria.yml"
@@ -43,6 +37,15 @@ disabled_services=(
   "home-assistant.yml"
   "filebrowser.yml"
   "php-fpm.yml"
+  "calorie-tracker.yml"
+  "mailer.yml"
+  "uptime-kuma.yml"
+  "ntfy.yml"
+  "syncthing.yml"
+  "wireguard.yml"
+  "monica.yml"
+  "memos.yml"
+  "grafana.yml"
 );
 
 for service in "${enabled_services[@]}"; do
