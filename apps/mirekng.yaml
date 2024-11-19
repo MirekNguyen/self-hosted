@@ -11,7 +11,7 @@ spec:
     path: charts/mirekng
     helm:
       valuesObject:
-        replicas: 1
+        replicas: 2
         namespace: default
         appName: mirekng
 
