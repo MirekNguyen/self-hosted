@@ -1,6 +1,6 @@
 #!/bin/bash
 
-yml_directory="/home/binh/self-hosted/services-enabled"
+yml_directory="/home/binh/self-hosted/services"
 project_directory="/home/binh/self-hosted/"
 
 yml_files=()
