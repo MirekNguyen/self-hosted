@@ -1,0 +1,17 @@
+version: '3'
+
+networks:
+  default:
+    name: nginx-services
+
+volumes:
+  memos-data:
+    name: memos-data
+
+services:
+  memos:
+    image: neosmemo/memos:stable
+    container_name: memos
+    volumes:
+      - memos-data:/var/opt/memos
+    restart: unless-stopped
