@@ -13,9 +13,9 @@ spec:
       valuesObject:
         librechat:
           configEnv:
-            ALLOW_REGISTRATION: "true"
-            ALLOW_SOCIAL_LOGIN: "true"
-            ALLOW_SOCIAL_REGISTRATION: "true"
+            ALLOW_REGISTRATION: "false"
+            ALLOW_SOCIAL_LOGIN: "false"
+            ALLOW_SOCIAL_REGISTRATION: "false"
             ENDPOINTS: "openAI,assistants,azureOpenAI,bingAI,google,gptPlugins,anthropic"
             ANTHROPIC_MODELS: "claude-3-5-sonnet-20240620,claude-3-opus-20240229,claude-3-sonnet-20240229,claude-3-haiku-20240307,claude-2.1,claude-2,claude-1.2,claude-1,claude-1-100k,claude-instant-1,claude-instant-1-100k"
             GOOGLE_MODELS: "gemini-1.5-flash-latest,gemini-1.0-pro,gemini-1.0-pro-001,gemini-1.0-pro-latest,gemini-1.0-pro-vision-latest,gemini-1.5-pro-latest,gemini-pro,gemini-pro-vision"
