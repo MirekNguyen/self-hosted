@@ -11,6 +11,8 @@ spec:
     path: charts/librechat
     helm:
       valuesObject:
+        librechat-rag-api:
+          enabled: true
         librechat:
           configEnv:
             ALLOW_REGISTRATION: "false"
