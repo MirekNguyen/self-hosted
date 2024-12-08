@@ -29,6 +29,7 @@ spec:
           sslSecretName: ssl-certificate
 
         volumes:
+          storageClassName: longhorn
           config:
             name: config-data
             pvc:
