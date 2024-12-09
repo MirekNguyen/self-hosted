@@ -12,7 +12,7 @@ spec:
     helm:
       valuesObject:
         librechat-rag-api:
-          enabled: true
+          enabled: false
         librechat:
           configEnv:
             ALLOW_REGISTRATION: "false"
