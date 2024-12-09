@@ -11,7 +11,7 @@ spec:
     path: charts/flood
     helm:
       valuesObject:
-        replicas: 1
+        replicas: 0
         namespace: default
         appName: flood
 
