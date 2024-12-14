@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sftpgo
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MirekNguyen/self-hosted
+    targetRevision: kubernetes
+    path: charts/sftpgo
+    helm:
+      valuesObject:
+        replicas: 1
+        namespace: default
+        appName: sftpgo
+
+        image:
+          repository: drakkan/sftpgo
+          tag: latest
+
+        ports:
+          containerPort: 8080
+          servicePort: 8080
+
+        ingress:
+          host: mirekng.com
+          hostPrefix: files
+          sslSecretName: ssl-certificate
+
+        volumes:
+          config:
+            name: config-data
+            pvc:
+              mount: /var/lib/sftpgo
+              claimName: sftpgo-config-pvc
+          data:
+            name: data
+            pvc:
+              mount: /srv/sftpgo
+              claimName: sftpgo-data-pvc
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
