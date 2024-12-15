@@ -36,8 +36,10 @@ spec:
               claimName: wireguard-config-pvc
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: wireguard
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
