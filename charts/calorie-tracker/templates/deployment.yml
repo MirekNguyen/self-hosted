@@ -22,5 +22,5 @@ spec:
           ports:
             - containerPort: {{ .Values.ports.containerPort }}
           envFrom:
-            - configMapRef:
-                name: calorie-tracker-config
+            - secretRef:
+                name: {{ .Values.database.secretName }}
