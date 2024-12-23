@@ -10,19 +10,20 @@ spec:
       template:
         spec:
           containers:
-          - name: herdyn-youtube-rss
+          {{- range .Values.jobs }}
+          - name: {{ .name }}
             image: mireknguyen/youtube-search
             args:
               - "--channel"
-              - "UCBJY0_6cB6q1THgfokwpQxA"
+              - "{{ .channel }}"
               - "--playlist"
-              - "UUBJY0_6cB6q1THgfokwpQxA"
+              - "{{ .playlist }}"
               - "-t"
-              - "Europe/Prague"
+              - "{{ .timezone }}"
               - "-r"
-              - "20"
+              - "{{ .rate }}"
               - "-o"
-              - "/out/herdyn.xml"
+              - "/out/{{ .output }}"
             env:
             - name: YOUTUBE_DATA_API_KEY
               valueFrom:
@@ -32,28 +33,7 @@ spec:
             volumeMounts:
             - name: rss-volume
               mountPath: /out
-          - name: ludwig-youtube-rss
-            image: mireknguyen/youtube-search
-            args:
-              - "--channel"
-              - "UCrPseYLGpNygVi34QpGNqpA"
-              - "--playlist"
-              - "UUrPseYLGpNygVi34QpGNqpA"
-              - "-t"
-              - "Europe/Prague"
-              - "-r"
-              - "20"
-              - "-o"
-              - "/out/ludwig.xml"
-            env:
-            - name: YOUTUBE_DATA_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: youtube-api-key
-                  key: YOUTUBE_DATA_API_KEY
-            volumeMounts:
-            - name: rss-volume
-              mountPath: /out
+          {{- end }}
           restartPolicy: OnFailure
           volumes:
           - name: rss-volume

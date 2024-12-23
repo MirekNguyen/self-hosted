@@ -34,6 +34,20 @@ spec:
             pvc:
               mount: /usr/share/nginx/html
               claimName: rss-pvc
+        jobs:
+          - name: herdyn-youtube-rss
+            channel: UCBJY0_6cB6q1THgfokwpQxA
+            playlist: UUBJY0_6cB6q1THgfokwpQxA
+            timezone: Europe/Prague
+            rate: "20"
+            output: herdyn.xml
+
+          - name: ludwig-youtube-rss
+            channel: UCrPseYLGpNygVi34QpGNqpA
+            playlist: UUrPseYLGpNygVi34QpGNqpA
+            timezone: Europe/Prague
+            rate: "20"
+            output: ludwig.xml
   destination:
     server: https://kubernetes.default.svc
     namespace: rss
