@@ -32,7 +32,7 @@ spec:
           rss:
             name: rss-volume
             pvc:
-              mount: /out
+              mount: /usr/share/nginx/html
               claimName: rss-pvc
   destination:
     server: https://kubernetes.default.svc
