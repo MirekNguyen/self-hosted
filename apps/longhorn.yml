@@ -56,3 +56,27 @@ spec:
             name: longhorn-frontend
             port:
               number: 80
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: longhorn-auth-external
+  namespace: longhorn-system
+spec:
+  refreshInterval: "1h"
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    name: longhorn-auth
+    template:
+      type: kubernetes.io/basic-auth
+  data:
+    - secretKey: username
+      remoteRef:
+        key: "kv/longhorn"
+        property: "username"
+    - secretKey: password
+      remoteRef:
+        key: "kv/longhorn"
+        property: "password"
