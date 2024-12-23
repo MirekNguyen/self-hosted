@@ -31,6 +31,17 @@ spec:
 EOF
 ```
 
+## Longhorn setup S3 backup
+
+```bash
+kubectl create secret generic longhorn-b2 \
+  -n longhorn-system \
+  --from-literal=AWS_ACCESS_KEY_ID=... \
+  --from-literal=AWS_ENDPOINTS=... \
+  --from-literal=AWS_SECRET_ACCESS_KEY=... \
+  --type=Opaque
+```
+
 ## Hashicorp vault installation
 
 ```bash
