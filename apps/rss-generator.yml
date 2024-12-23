@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rss-generator
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MirekNguyen/self-hosted
+    targetRevision: kubernetes
+    path: charts/rss-generator
+    helm:
+      valuesObject:
+        replicas: 1
+        namespace: rss
+        appName: rss-generator
+
+        image:
+          repository: nginx
+          tag: latest
+
+        ports:
+          containerPort: 80
+          servicePort: 80
+
+        ingress:
+          host: mirekng.com
+          hostPrefix: feed
+          sslSecretName: ssl-certificate
+
+        volumes:
+          rss:
+            name: rss-volume
+            pvc:
+              mount: /out
+              claimName: rss-pvc
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: rss
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
