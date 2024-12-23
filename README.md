@@ -1,5 +1,36 @@
 # Self hosted
 
+## Create new certificate
+
+- create a secret to issue (from Cloudflare API)
+
+```bash
+kubectl create secret generic cloudflare-api-key-secret \
+  --namespace cert-manager \
+  --type=Opaque \
+  --from-literal=api-key=...
+```
+
+- issue new certificate
+
+```bash
+kubectl apply -f - <<EOF
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ssl-certificate
+  namespace: default
+spec:
+  secretName: ssl-certificate
+  issuerRef:
+    name: acme-issuer
+    kind: ClusterIssuer
+  dnsNames:
+    - '*.mirekng.com'
+    - 'mirekng.com'
+EOF
+```
+
 ## Hashicorp vault installation
 
 ```bash
