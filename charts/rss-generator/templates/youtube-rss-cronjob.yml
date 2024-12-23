@@ -1,0 +1,61 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: youtube-rss-cronjob
+  namespace: {{ .Values.namespace }}
+spec:
+  schedule: "0 */3 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: herdyn-youtube-rss
+            image: mireknguyen/youtube-search
+            args:
+              - "--channel"
+              - "UCBJY0_6cB6q1THgfokwpQxA"
+              - "--playlist"
+              - "UUBJY0_6cB6q1THgfokwpQxA"
+              - "-t"
+              - "Europe/Prague"
+              - "-r"
+              - "20"
+              - "-o"
+              - "/out/herdyn.xml"
+            env:
+            - name: YOUTUBE_DATA_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: youtube-api-key
+                  key: YOUTUBE_DATA_API_KEY
+            volumeMounts:
+            - name: rss-volume
+              mountPath: /out
+          - name: ludwig-youtube-rss
+            image: mireknguyen/youtube-search
+            args:
+              - "--channel"
+              - "UCrPseYLGpNygVi34QpGNqpA"
+              - "--playlist"
+              - "UUrPseYLGpNygVi34QpGNqpA"
+              - "-t"
+              - "Europe/Prague"
+              - "-r"
+              - "20"
+              - "-o"
+              - "/out/ludwig.xml"
+            env:
+            - name: YOUTUBE_DATA_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: youtube-api-key
+                  key: YOUTUBE_DATA_API_KEY
+            volumeMounts:
+            - name: rss-volume
+              mountPath: /out
+          restartPolicy: OnFailure
+          volumes:
+          - name: rss-volume
+            persistentVolumeClaim:
+              claimName: rss-pvc
