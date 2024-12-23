@@ -5,7 +5,7 @@ metadata:
   name: notification-rss-cronjob-{{ .name }}
   namespace: {{ $.Values.namespace }}
 spec:
-  schedule: {{ .schedule }}
+  schedule: "{{ .schedule }}"
   jobTemplate:
     spec:
       template:
