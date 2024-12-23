@@ -55,8 +55,10 @@ spec:
             timezone: Europe/Prague
             rate: "20"
             output: ludwig.xml
+
         notificationJobs:
           - name: neovim-rss
+            schedule: 0 0 * * 2
             title: neovim-rss
             link: https://www.reddit.com/r/neovim/top/?t=month
             output: neovim.xml
