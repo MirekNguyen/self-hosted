@@ -1,0 +1,76 @@
+---
+- name: Ensure Nix is installed
+  hosts: mirekng.com
+  become: true
+  tasks:
+    - name: Check if Nix is installed
+      ansible.builtin.command: which nix-env
+      register: nix_installed
+      failed_when: false
+      changed_when: false
+
+    - name: Install necessary dependencies
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - curl
+        - xz-utils
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install Nix
+      ansible.builtin.shell: |
+        curl -L https://nixos.org/nix/install | sh
+      args:
+        creates: /nix
+      when: nix_installed.rc != 0
+- name: Packages playbook
+  hosts: mirekng.com
+  tasks:
+    - name: Ensure packages are installed
+      become: true
+      ansible.builtin.apt:
+        name:
+          - fish
+          - neovim
+          - git
+          - fd-find
+          - make
+          - fzf
+          - g++
+          - nodejs
+          - bc
+          - ripgrep
+          - jq
+          - telnet
+          - file
+          - open-iscsi
+          - rclone
+          - xz-utils
+          - zoxide
+        state: present
+    - name: Ensure shell is set to zsh
+      become: true
+      ansible.builtin.user:
+        name: binh
+        shell: /usr/bin/zsh
+
+- name: Ensure dotfiles are installed from Git
+  hosts: all
+  vars:
+    dotfiles_repo_url: "git@github.com:MirekNguyen/dotfiles.git"
+    dotfiles_dest: "{{ ansible_env.HOME }}/.config/dotfiles"
+
+  tasks:
+    - name: Ensure the ~/.config directory exists
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.config"
+        state: directory
+        mode: '0755'
+
+    - name: Clone or update the dotfiles repository
+      ansible.builtin.git:
+        repo: "{{ dotfiles_repo_url }}"
+        dest: "{{ dotfiles_dest }}"
+        update: true
+        force: true
