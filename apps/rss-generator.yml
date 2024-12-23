@@ -61,11 +61,18 @@ spec:
             title: Neovim
             link: https://www.reddit.com/r/neovim/top/?t=month
             output: neovim.xml
+
           - name: work-news-rss
             schedule: 0 0 * * 2
             title: Work news
             link: https://rss.mirekng.com/
             output: work-news.xml
+
+          - name: genshin-leaks-rss
+            schedule: 0 0 * * 2
+            title: Genshin leaks
+            link: https://www.reddit.com/r/Genshin_Impact_Leaks/new/
+            output: genshin-leaks.xml
   destination:
     server: https://kubernetes.default.svc
     namespace: rss
