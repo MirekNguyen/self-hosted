@@ -1,25 +1,30 @@
-{{- range .Values.notificationJobs }}
+{{- range $cronjob := $.Values.notificationJobs }}
+---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: notification-rss-cronjob-{{ .name }}
+  name: {{ $cronjob.name }}
   namespace: {{ $.Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ $cronjob.name }}
+    app.kubernetes.io/component: cronjob
+    app.kubernetes.io/instance: api
 spec:
-  schedule: "{{ .schedule }}"
+  schedule: "{{ $cronjob.schedule }}"
   jobTemplate:
     spec:
       template:
         spec:
           containers:
-          - name: {{ .name }}
+          - name: {{ $cronjob.name }}
             image: mireknguyen/rss-notification
             args:
               - "-t"
-              - "{{ .title }}"
+              - "{{ $cronjob.title }}"
               - "-l"
-              - "{{ .link }}"
+              - "{{ $cronjob.link }}"
               - "-o"
-              - "/out/{{ .output }}"
+              - "/out/{{ $cronjob.output }}"
             volumeMounts:
             - name: rss-volume
               mountPath: /out
