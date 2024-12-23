@@ -48,6 +48,18 @@ spec:
             timezone: Europe/Prague
             rate: "20"
             output: ludwig.xml
+
+          - name: ludwin-youtube-rss
+            channel: UCrPseYLGpNygVi34QpGNqpA
+            playlist: UUrPseYLGpNygVi34QpGNqpA
+            timezone: Europe/Prague
+            rate: "20"
+            output: ludwig.xml
+        notificationJobs:
+          - name: neovim-rss
+            title: neovim-rss
+            link: https://www.reddit.com/r/neovim/top/?t=month
+            output: neovim.xml
   destination:
     server: https://kubernetes.default.svc
     namespace: rss

@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: notification-rss-cronjob
+  namespace: {{ .Values.namespace }}
+spec:
+  schedule: "0 0 * * 2"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          {{- range .Values.notificationJobs }}
+          - name: {{ .name }}
+            image: mireknguyen/rss-notification
+            args:
+              - "-t"
+              - "{{ .title }}"
+              - "-l"
+              - "{{ .link }}"
+              - "/out/{{ .output }}"
+            volumeMounts:
+            - name: rss-volume
+              mountPath: /out
+          {{- end }}
+          restartPolicy: OnFailure
+          volumes:
+          - name: rss-volume
+            persistentVolumeClaim:
+              claimName: rss-pvc
