@@ -18,6 +18,7 @@ spec:
               - "{{ .title }}"
               - "-l"
               - "{{ .link }}"
+              - "-o"
               - "/out/{{ .output }}"
             volumeMounts:
             - name: rss-volume
