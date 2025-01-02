@@ -30,7 +30,7 @@ spec:
                   - mirekng.com
                   secretName: ssl-certificate
         postgresql:
-          enabled: true
+          enabled: false
           primary:
             resourcePreset: large
             persistence:
