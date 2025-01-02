@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mirekng
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MirekNguyen/self-hosted
+    targetRevision: kubernetes
+    path: charts/memos
+    helm:
+      valuesObject:
+        replicas: 1
+        namespace: memos
+        appName: mirekng
+
+        image:
+          repository: neosmemo/memos
+          tag: latest
+
+        ports:
+          containerPort: 5230
+          servicePort: 5230
+
+        ingress:
+          host: mirekng.com
+          hostPrefix: notes
+          sslSecretName: ssl-certificate
+        volumes:
+          config:
+            name: memos-config
+            pvc:
+              mount: /var/opt/memos
+              claimName: memos-config-pvc
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: memos
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
