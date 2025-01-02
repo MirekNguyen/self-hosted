@@ -11,7 +11,7 @@ spec:
     path: charts/germanist
     helm:
       valuesObject:
-        replicas: 1
+        replicas: 2
         namespace: default
         appName: germanist
 
