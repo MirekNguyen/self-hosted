@@ -12,6 +12,14 @@ spec:
     - ReadWriteMany
   hostPath:
     path: "/storage/config/jellyfin"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - dietpi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

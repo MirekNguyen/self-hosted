@@ -10,6 +10,14 @@ spec:
     - ReadWriteMany
   hostPath:
     path: "/ext-storage/media"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - dietpi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
