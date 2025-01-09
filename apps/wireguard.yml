@@ -18,6 +18,7 @@ spec:
         image:
           repository: weejewel/wg-easy
           tag: latest
+        secretName: wireguard-secret
 
         ports:
           containerPort: 51821
