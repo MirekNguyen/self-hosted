@@ -17,7 +17,7 @@ spec:
 
         image:
           repository: mireknguyen/calorie-tracker
-          tag: 1.0.4
+          tag: 1.0.6
 
         ports:
           containerPort: 3000
