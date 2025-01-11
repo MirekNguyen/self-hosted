@@ -4,6 +4,8 @@ metadata:
   name: "{{ .Values.appName }}-cronjob"
 spec:
   schedule: "{{ .Values.schedule }}"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
   jobTemplate:
     spec:
       template:
