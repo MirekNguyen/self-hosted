@@ -13,6 +13,7 @@ spec:
   schedule: "{{ $cronjob.schedule }}"
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 600
   jobTemplate:
     spec:
       template:
