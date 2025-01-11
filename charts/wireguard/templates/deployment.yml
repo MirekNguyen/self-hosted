@@ -15,12 +15,16 @@ spec:
       labels:
         app: "{{ .Values.appName }}-selector"
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: "dietpi"
       containers:
         - name: {{ .Values.appName }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - containerPort: {{ .Values.ports.containerPort }}
           env:
+            - name: ALLOWEDIPS
+              value: 0.0.0.0/0
             - name: WG_HOST
               value: {{ .Values.ingress.host }}
             - name: PASSWORD
