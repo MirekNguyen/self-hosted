@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: headlamp
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://headlamp-k8s.github.io/headlamp/
+    chart: headlamp
+    targetRevision: 0.27.0
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: headlamp
+  namespace: kube-system
+spec:
+  tls:
+  - hosts:
+    - mirekng.com
+    secretName: ssl-certificate
+  rules:
+  - host: headlamp.mirekng.com
+    http:
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: headlamp
+            port:
+              number: 80
