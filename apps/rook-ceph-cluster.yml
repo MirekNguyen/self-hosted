@@ -25,6 +25,16 @@ spec:
               - hosts:
                 - rook.mirekng.com
                 secretName: ssl-certificate
+          cephFileSystems:
+            - name: ceph-filesystem
+              spec:
+                metadataPool:
+                  replicated:
+                    size: 1
+                dataPools:
+                  - failureDomain: host
+                    replicated:
+                      size: 1
   destination:
     server: https://kubernetes.default.svc
     namespace: rook-ceph
