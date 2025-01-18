@@ -13,7 +13,9 @@ spec:
         values: |
           operatorNamespace: rook-ceph
           mon:
-            count: 1
+            allowMultiplePerNode: true
+          mgr:
+            allowMultiplePerNode: true
           cephClusterSpec:
             dashboard:
               ingressClassName: traefik
