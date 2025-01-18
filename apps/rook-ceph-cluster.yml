@@ -12,17 +12,6 @@ spec:
       helm:
         values: |
           operatorNamespace: rook-ceph
-          mon:
-            allowMultiplePerNode: true
-          mgr:
-            allowMultiplePerNode: true
-          cephClusterSpec:
-            dashboard:
-              ingressClassName: traefik
-              tls:
-              - hosts:
-                - rook.mirekng.com
-                secretName: ssl-certificate
   destination:
     server: https://kubernetes.default.svc
     namespace: rook-ceph
