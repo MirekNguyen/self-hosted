@@ -15,8 +15,10 @@ spec:
           cephClusterSpec:
             mon:
               allowMultiplePerNode: true
+              count: 1
             mgr:
               allowMultiplePerNode: true
+              count: 1
             dashboard:
               ingressClassName: traefik
               tls:
