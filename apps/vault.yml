@@ -13,6 +13,10 @@ spec:
         parameters:
           - name: "ui.enabled"
             value: "true"
+        valuesObject:
+          server:
+            dataStorage:
+              storageClass: longhorn
   destination:
     server: https://kubernetes.default.svc
     namespace: vault
