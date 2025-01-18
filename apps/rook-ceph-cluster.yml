@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rook-ceph-cluster
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - chart: rook-ceph-cluster
+      repoURL: https://charts.rook.io/release
+      targetRevision: 1.16.2
+      helm:
+        values: |
+          operatorNamespace: rook-ceph
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: rook-ceph
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
