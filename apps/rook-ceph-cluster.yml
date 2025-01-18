@@ -12,6 +12,8 @@ spec:
       helm:
         values: |
           operatorNamespace: rook-ceph
+          mon:
+            count: 1
           cephClusterSpec:
             dashboard:
               ingressClassName: traefik
