@@ -1,0 +1,95 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rook-ceph-cluster
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - chart: rook-ceph-cluster
+      repoURL: https://charts.rook.io/release
+      targetRevision: 1.16.2
+      helm:
+        values: |
+          operatorNamespace: rook-ceph
+          cephClusterSpec:
+            dashboard:
+              ssl: false
+            mon:
+              allowMultiplePerNode: true
+              count: 1
+            mgr:
+              allowMultiplePerNode: true
+              count: 1
+          cephFileSystems:
+            - name: ceph-filesystem
+              # see https://github.com/rook/rook/blob/v1.16.2/Documentation/CRDs/Shared-Filesystem/ceph-filesystem-crd.md#filesystem-settings for available configuration
+              spec:
+                metadataPool:
+                  replicated:
+                    size: 1
+                dataPools:
+                  - failureDomain: host
+                    replicated:
+                      size: 1
+                    # Optional and highly recommended, 'data0' by default, see https://github.com/rook/rook/blob/v1.16.2/Documentation/CRDs/Shared-Filesystem/ceph-filesystem-crd.md#pools
+                    name: data0
+                metadataServer:
+                  activeCount: 1
+                  activeStandby: true
+                  resources:
+                    limits:
+                      memory: "1Gi"
+                    requests:
+                      cpu: "100m"
+                      memory: "1Gi"
+                  priorityClassName: system-cluster-critical
+              storageClass:
+                enabled: true
+                isDefault: false
+                name: ceph-filesystem
+                # (Optional) specify a data pool to use, must be the name of one of the data pools above, 'data0' by default
+                pool: data0
+                reclaimPolicy: Delete
+                allowVolumeExpansion: true
+                volumeBindingMode: "Immediate"
+                annotations: {}
+                labels: {}
+                mountOptions: []
+                # see https://github.com/rook/rook/blob/v1.16.2/Documentation/Storage-Configuration/Shared-Filesystem-CephFS/filesystem-storage.md#provision-storage for available configuration
+                parameters:
+                  # The secrets contain Ceph admin credentials.
+                  csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
+                  csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
+                  csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
+                  csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
+                  csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
+                  csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
+                  # Specify the filesystem type of the volume. If not specified, csi-provisioner
+                  # will set default as `ext4`. Note that `xfs` is not recommended due to potential deadlock
+                  # in hyperconverged settings where the volume is mounted on the same node as the osds.
+                  csi.storage.k8s.io/fstype: ext4
+          host:
+            name: rook.mirekng.com
+          tls:
+          - hosts:
+              - rook.mirekng.com
+            secretName: ssl-certificate
+          ingressClassName: traefik
+          cephFileSystems[0].spec.metadataPool.replicated.size: 1
+          cephFileSystems[0].spec.dataPools[0].replicated.size: 1
+          cephFileSystems[0].spec.metadataServer.resources.limits.memory: "1Gi"
+          cephFileSystems[0].spec.metadataServer.resources.requests.cpu: "100m"
+          cephFileSystems[0].spec.metadataServer.resources.requests.memory: "1Gi"
+          cephClusterSpec.resources.osd.limits.memory: "1Gi"
+          cephClusterSpec.resources.osd.requests.cpu: "100m"
+          cephClusterSpec.resources.osd.requests.memory: "1Gi"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: rook-ceph
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
