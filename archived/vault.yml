@@ -49,3 +49,19 @@ spec:
             name: vault
             port:
               number: 8200
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterSecretStore
+metadata:
+  name: vault-backend
+spec:
+  provider:
+    vault:
+      server: "https://vault.mirekng.com"
+      path: "kv"
+      version: "v2"
+      auth:
+        tokenSecretRef:
+          name: "vault-token"
+          namespace: "external-secrets"
+          key: "token"
