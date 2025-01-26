@@ -1,7 +1,7 @@
 apiVersion: v1                      
 kind: PersistentVolume              
 metadata:                           
-  name: organizr-config-pv          
+  name: freshrss-config-pv          
   namespace: default
 spec:                               
   capacity:                         
@@ -10,7 +10,7 @@ spec:
   accessModes:                      
     - ReadWriteOnce                 
   hostPath:                         
-    path: "/storage/config/organizr"
+    path: "/storage/config/freshrss"
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -23,7 +23,7 @@ spec:
 apiVersion: v1                      
 kind: PersistentVolumeClaim         
 metadata:                           
-  name: organizr-config-pvc         
+  name: freshrss-config-pvc         
   namespace: default
 spec:                               
   accessModes:                      
