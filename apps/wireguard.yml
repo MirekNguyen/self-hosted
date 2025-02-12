@@ -28,6 +28,8 @@ spec:
           host: mirekng.com
           hostPrefix: vpn
           sslSecretName: ssl-certificate
+        wireguard:
+          host: vpn.mirekng.com
 
         volumes:
           config:

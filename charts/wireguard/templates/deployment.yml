@@ -26,7 +26,7 @@ spec:
             - name: ALLOWEDIPS
               value: 0.0.0.0/0
             - name: WG_HOST
-              value: {{ .Values.ingress.host }}
+              value: {{ .Values.wireguard.host }}
             - name: PASSWORD
               valueFrom: 
                 secretKeyRef:
