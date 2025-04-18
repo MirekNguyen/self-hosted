@@ -13,7 +13,7 @@ spec:
       valuesObject:
         useDeprecatedPostgresChart: true
         env:
-          DB_SKIP_MIGRATIONS: true
+          DB_SKIP_MIGRATIONS: false
         image:
           tag: v1.131.3
         immich:
