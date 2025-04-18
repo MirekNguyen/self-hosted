@@ -14,6 +14,8 @@ spec:
         useDeprecatedPostgresChart: true
         env:
           DB_SKIP_MIGRATIONS: true
+        image:
+          tag: v1.131.3
         immich:
           persistence:
             library:
