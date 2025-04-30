@@ -26,11 +26,16 @@ spec:
             - name: PGID
               value: "1000"
           volumeMounts:
+            - mountPath: /dev/dri
+              name: dri
             - mountPath: {{ .Values.volumes.config.pvc.mount }}
               name: {{ .Values.volumes.config.name }}
             - mountPath: {{ .Values.volumes.media.pvc.mount }}
               name: {{ .Values.volumes.media.name }}
       volumes:
+        - name: dri
+          hostPath:
+            path: /dev/dri
         - name: {{ .Values.volumes.config.name }}
           persistentVolumeClaim:
             claimName: {{ .Values.volumes.config.pvc.claimName }}
