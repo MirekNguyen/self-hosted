@@ -1,5 +1,4 @@
 values.yml
 values.yaml
-secrets
 *.tfvars
 .terraform
