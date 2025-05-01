@@ -1,0 +1,93 @@
+#!/bin/bash
+
+set -e
+
+if ! command -v gum &> /dev/null; then
+  echo "❌ Gum is not installed. Please install it first:"
+  echo "   👉 brew install charmbracelet/tap/gum"
+  echo "   Or visit: https://github.com/charmbracelet/gum"
+  exit 1
+fi
+
+SCRIPTS_DIR="./scripts"
+
+apply_apps() {
+  echo -e "\n📦 STEP: Apply ArgoCD app-of-apps and apps"
+  "$SCRIPTS_DIR/apply-apps.sh"
+}
+
+create_secrets() {
+  echo -e "\n🛡️ STEP: Create/sync Kubernetes secrets from .env"
+  "$SCRIPTS_DIR/create-k8s-secrets.sh"
+}
+
+apply_volumes() {
+  echo -e "\n🗃️ STEP: Apply all volumes"
+  "$SCRIPTS_DIR/apply-volumes.sh"
+}
+
+load_env() {
+  echo -e "\n🔐 STEP: Load secrets from Infisical to .env"
+  "$SCRIPTS_DIR/load-env.sh"
+}
+
+while true; do
+  MAIN_OPTIONS=(
+    "🔐 Load Infisical secrets to .env"
+    "🔄 Deploy all components"
+    "⚙️ Run a specific step"
+    "❌ Exit"
+  )
+
+  STEP=$(gum choose \
+    --header "📋 What would you like to do?" \
+    -- "${MAIN_OPTIONS[@]}")
+
+  echo ""
+
+  case "$STEP" in
+    "🔐 Load Infisical secrets to .env")
+      load_env
+      ;;
+
+    "🔄 Deploy all components")
+      apply_apps
+      create_secrets
+      apply_volumes
+      ;;
+
+    "⚙️ Run a specific step")
+      STEP_OPTIONS=(
+        "📦 Apply app-of-apps and apps"
+        "🛡️ Create Kubernetes secrets"
+        "🗃️ Apply volumes"
+        "↩️ Back"
+      )
+
+      SUBSTEP=$(gum choose \
+        --header "⚙️ Choose a specific step to run:" \
+        -- "${STEP_OPTIONS[@]}")
+
+      echo ""
+
+      case "$SUBSTEP" in
+        "📦 Apply app-of-apps and apps") apply_apps ;;
+        "🛡️ Create Kubernetes secrets") create_secrets ;;
+        "🗃️ Apply volumes") apply_volumes ;;
+        "↩️ Back") continue ;;
+        *) echo "❌ Invalid selection." ;;
+      esac
+      ;;
+
+    "❌ Exit")
+      echo "👋 Exiting."
+      break
+      ;;
+
+    *)
+      echo "❌ Invalid selection."
+      ;;
+  esac
+
+  echo -e "\n✅ Task completed.\n"
+done
