@@ -2,3 +2,4 @@ values.yml
 values.yaml
 *.tfvars
 .terraform
+not-used

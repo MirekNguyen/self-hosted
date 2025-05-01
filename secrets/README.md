@@ -1,6 +1,34 @@
 # Creating Kubernetes Secrets
 
 This folder contains definitions for Kubernetes `Secret` resources used by various services. To apply them securely without committing sensitive data, create the secrets using the following `kubectl` commands.
+Secrets are managed via [Infisical](https://infisical.com). Follow the steps below to manually retrieve and create the required secrets.
+
+## Prerequisites
+
+### Install Infisical CLI via Homebrew
+
+```sh
+brew install infisical/get-cli/infisical
+```
+
+### Authenticate and initialize
+
+```sh
+infisical login
+infisical init
+```
+
+## Step 1: Retrieve Secrets Manually
+
+Run the following commands and **copy each secret value**:
+
+```sh
+infisical secrets get --plain cloudflare-api-key-secret
+infisical secrets get --plain infisical-clientId-secret
+infisical secrets get --plain infisical-clientSecret-secret
+```
+
+> Use `--env=prod` or another environment flag if needed.
 
 ## 1. Cloudflare API Key Secret (for `cert-manager`)
 
