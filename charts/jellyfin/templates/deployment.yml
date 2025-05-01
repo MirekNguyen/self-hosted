@@ -15,6 +15,9 @@ spec:
       labels:
         app: "{{ .Values.appName }}-selector"
     spec:
+      securityContext:
+        supplementalGroups:
+          - 44
       containers:
         - name: {{ .Values.appName }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
