@@ -17,10 +17,12 @@ spec:
     spec:
       securityContext:
         supplementalGroups:
-          - 44
+          - 44  # GID for 'video' group
       containers:
         - name: {{ .Values.appName }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          securityContext:
+            privileged: true
           ports:
             - containerPort: {{ .Values.ports.containerPort }}
           env:
@@ -28,6 +30,10 @@ spec:
               value: "1000"
             - name: PGID
               value: "1000"
+            - name: LIBVA_DRIVER_NAME
+              value: "iHD"  # Or "i965" depending on your Intel GPU
+            - name: LIBVA_DISPLAY
+              value: "drm"
           volumeMounts:
             - mountPath: /dev/dri
               name: dri
