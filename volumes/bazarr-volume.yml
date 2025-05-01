@@ -11,14 +11,6 @@ spec:
     - ReadWriteOnce                 
   hostPath:                         
     path: "/storage/config/bazarr"
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - dietpi
 ---                                 
 apiVersion: v1                      
 kind: PersistentVolumeClaim         
