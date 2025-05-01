@@ -27,7 +27,7 @@ data:
                 proxy_set_header Connection "upgrade";
                 proxy_read_timeout 86400;
 
-                proxy_pass http://192.168.0.12:2283;
+                proxy_pass http://78.45.1.148:2283;
             }
             error_page   500 502 503 504  /50x.html;
             location = /50x.html {
