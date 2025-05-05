@@ -16,6 +16,7 @@ spec:
           {{- range .Values.jobs }}
           - name: {{ .name }}
             image: registry.hub.docker.com/mireknguyen/youtube-search
+            imagePullPolicy: IfNotPresent
             args:
               - "--channel"
               - "{{ .channel }}"
