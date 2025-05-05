@@ -15,7 +15,7 @@ spec:
           containers:
           {{- range .Values.jobs }}
           - name: {{ .name }}
-            image: mireknguyen/youtube-search
+            image: mireknguyen/youtube-search:latest
             args:
               - "--channel"
               - "{{ .channel }}"
