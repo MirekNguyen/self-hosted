@@ -73,6 +73,12 @@ spec:
             title: Genshin leaks
             link: https://www.reddit.com/r/Genshin_Impact_Leaks/new/
             output: genshin-leaks.xml
+
+          - name: github-updates-rss
+            schedule: 0 0 * * 2
+            title: Github updates
+            link: https://github.com/
+            output: github-updates.xml
   destination:
     server: https://kubernetes.default.svc
     namespace: rss
