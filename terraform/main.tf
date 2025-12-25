@@ -18,10 +18,10 @@ variable "hcloud_token" {
   sensitive   = true
 }
 
-resource "hcloud_server" "node1" {
-  name        = "hetzner-server"
-  image       = "debian-11"
-  server_type = "cax21"
+resource "hcloud_server" "dokploy" {
+  name        = "dokploy"
+  image       = "debian-13"
+  server_type = "cx33"
   location    = "nbg1"
   public_net {
     ipv4_enabled = true
@@ -29,12 +29,12 @@ resource "hcloud_server" "node1" {
   }
 }
 
-output "server_ipv4" {
+output "dokploy_server_ipv4" {
   description = "The IPv4 address of the server"
-  value       = hcloud_server.node1.ipv4_address
+  value       = hcloud_server.dokploy.ipv4_address
 }
 
-output "server_ipv6" {
+output "dokploy_server_ipv6" {
   description = "The IPv6 address of the server"
-  value       = hcloud_server.node1.ipv6_address
+  value       = hcloud_server.dokploy.ipv6_address
 }
