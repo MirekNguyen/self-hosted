@@ -17,7 +17,7 @@ spec:
 
         image:
           repository: linuxserver/qbittorrent
-          tag: latest
+          tag: 5.1.4
 
         ingress:
           host: mirekng.com
