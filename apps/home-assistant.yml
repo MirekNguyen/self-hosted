@@ -16,8 +16,8 @@ spec:
         appName: home-assistant
 
         image:
-          repository: lscr.io/linuxserver/homeassistant
-          tag: latest
+          repository: linuxserver/homeassistant
+          tag: 2025.12.4
 
         ports:
           containerPort: 8123
