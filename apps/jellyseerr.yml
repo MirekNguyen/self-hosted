@@ -17,7 +17,7 @@ spec:
 
         image:
           repository: fallenbagel/jellyseerr
-          tag: sha-42eec24
+          tag: 2.7.3
 
         ports:
           containerPort: 5055
