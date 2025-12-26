@@ -17,7 +17,7 @@ spec:
 
         image:
           repository: linuxserver/radarr
-          tag: latest
+          tag: 6.0.4
 
         ports:
           containerPort: 7878

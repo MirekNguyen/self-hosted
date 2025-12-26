@@ -17,7 +17,7 @@ spec:
 
         image:
           repository: linuxserver/sonarr
-          tag: latest
+          tag: 4.0.16
 
         ports:
           containerPort: 8989
