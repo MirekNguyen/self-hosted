@@ -24,9 +24,11 @@ Image: `linuxserver/sonarr`
 
 ### Indexers (via Prowlarr)
 
-- The Pirate Bay — enabled
-- Nyaa.si — enabled
-- 1337x — disabled (IP banned by Cloudflare, see Prowlarr docs)
+- 1337x — enabled (min seeders: 5)
+- Nyaa.si — enabled (min seeders: 2, sonarr compatibility on)
+- The Pirate Bay — enabled (min seeders: 5)
+- EZTV — enabled (min seeders: 5, TV scene releases)
+- LimeTorrents — enabled (min seeders: 5, fallback)
 
 ### Notifications
 
@@ -45,6 +47,15 @@ Image: `linuxserver/sonarr`
 
 - Any, SD, HD-720p, HD-1080p (upgrades enabled, cutoff: Bluray-1080p), Ultra-HD, HD-720p/1080p
 
+### Custom formats
+
+| Format | Score | Purpose |
+|--------|-------|---------|
+| SubsPlease | +1000 | Preferred anime fansub group |
+| Erai-raws | +500 | Secondary anime fansub group |
+
+Applied to HD-1080p profile with `minFormatScore: 0` (prefer but don't require).
+
 ### Naming
 
 - `renameEpisodes`: true
@@ -61,3 +72,4 @@ Image: `linuxserver/sonarr`
 
 - [2026-04-10](changelog/2026-04-10-media-stack.md) — Enabled hardlinks, enabled extra file import, removed dead Transmission client and Ruddarr webhook, image update 4.0.16 -> 4.0.17
 - [2026-04-10](changelog/2026-04-10-media-stack-optimization.md) — Enabled episode renaming, enabled quality upgrades for HD-1080p, fixed ntfy notification triggers
+- [2026-04-10](changelog/2026-04-10-indexer-overhaul.md) — Added custom formats for SubsPlease/Erai-raws, removed broken release profile
