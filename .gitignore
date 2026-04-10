@@ -4,3 +4,4 @@ values.yaml
 .terraform
 not-used
 .env
+tmp
