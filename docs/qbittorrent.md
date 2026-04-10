@@ -58,4 +58,4 @@ None currently.
 ## Changelog
 
 - [2026-04-10](changelog/2026-04-10-media-stack.md) — Seeding time changed from 1 minute to 60 minutes
-- [2026-04-10](changelog/2026-04-10-media-stack-optimization.md) — Fixed seeding time in config file, created incomplete directory, cleaned up .DS_Store files
+- [2026-04-10](changelog/2026-04-10-media-stack-optimization.md) — Fixed seeding time in config file, created incomplete directory, cleaned up .DS_Store files, added VueTorrent via DOCKER_MODS
