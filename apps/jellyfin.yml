@@ -23,6 +23,12 @@ spec:
           containerPort: 8096
           servicePort: 8096
 
+        subtitleProxy:
+          port: 8097
+          image:
+            repository: openresty/openresty
+            tag: alpine
+
         ingress:
           host: mirekng.com
           hostPrefix: tv
