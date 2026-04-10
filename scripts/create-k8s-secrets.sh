@@ -52,15 +52,27 @@ echo ""
 echo "📁 Applying static Kubernetes secrets from: $SECRETS_DIR"
 echo ""
 
-for file in "$SECRETS_DIR"/certificate.yml "$SECRETS_DIR"/infisical-store.yml; do
-  if [ -f "$file" ]; then
-    echo "🔧 Applying: $(basename "$file")"
-    kubectl apply -f "$file"
-    echo ""
-  else
-    echo "⚠️  Skipped missing file: $(basename "$file")"
-    echo ""
+echo "🔧 Applying: certificate.yml"
+kubectl apply -f "$SECRETS_DIR/certificate.yml"
+echo ""
+
+echo "⏳ Waiting for External Secrets CRDs to be available..."
+TIMEOUT=120
+INTERVAL=5
+ELAPSED=0
+while ! kubectl get crd clustersecretstores.external-secrets.io &>/dev/null; do
+  if [ "$ELAPSED" -ge "$TIMEOUT" ]; then
+    echo "❌ Timed out waiting for External Secrets CRDs after ${TIMEOUT}s."
+    exit 1
   fi
+  sleep "$INTERVAL"
+  ELAPSED=$((ELAPSED + INTERVAL))
 done
+echo "✅ External Secrets CRDs are available."
+echo ""
+
+echo "🔧 Applying: infisical-store.yml"
+kubectl apply -f "$SECRETS_DIR/infisical-store.yml"
+echo ""
 
 echo "✅ All Kubernetes secrets created and applied successfully."
