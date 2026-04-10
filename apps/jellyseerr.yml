@@ -16,8 +16,8 @@ spec:
         appName: jellyseerr
 
         image:
-          repository: fallenbagel/jellyseerr
-          tag: 2.7.3
+          repository: ghcr.io/seerr-team/seerr
+          tag: v3.0.1
 
         ports:
           containerPort: 5055
@@ -27,6 +27,31 @@ spec:
           host: mirekng.com
           hostPrefix: jellyseerr
           sslSecretName: ssl-certificate
+
+        podSecurityContext:
+          fsGroup: 1000
+          fsGroupChangePolicy: OnRootMismatch
+
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          privileged: false
+          runAsUser: 1000
+          runAsGroup: 1000
+          seccompProfile:
+            type: RuntimeDefault
+
+        initContainers:
+          - name: fix-permissions
+            image: alpine:latest
+            command: ["sh", "-c", "chown -R 1000:1000 /app/config"]
+            volumeMounts:
+              - mountPath: /app/config
+                name: jellyseerr-config
 
         volumes:
           config:
