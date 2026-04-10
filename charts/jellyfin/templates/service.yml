@@ -8,5 +8,5 @@ spec:
     app: "{{ .Values.appName }}-selector"
   ports:
     - protocol: TCP
-      targetPort: {{ .Values.ports.containerPort }}
+      targetPort: {{ .Values.subtitleProxy.port }}
       port: {{ .Values.ports.servicePort }}

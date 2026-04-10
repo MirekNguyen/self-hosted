@@ -31,7 +31,7 @@ spec:
             - name: PGID
               value: "1000"
             - name: LIBVA_DRIVER_NAME
-              value: "iHD"  # Or "i965" depending on your Intel GPU
+              value: "iHD"
             - name: LIBVA_DISPLAY
               value: "drm"
           volumeMounts:
@@ -41,6 +41,15 @@ spec:
               name: {{ .Values.volumes.config.name }}
             - mountPath: {{ .Values.volumes.media.pvc.mount }}
               name: {{ .Values.volumes.media.name }}
+        - name: subtitle-proxy
+          image: "{{ .Values.subtitleProxy.image.repository }}:{{ .Values.subtitleProxy.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.subtitleProxy.port }}
+          volumeMounts:
+            - name: subtitle-proxy-config
+              mountPath: /usr/local/openresty/nginx/conf/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
       volumes:
         - name: dri
           hostPath:
@@ -51,3 +60,6 @@ spec:
         - name: {{ .Values.volumes.media.name }}
           persistentVolumeClaim:
             claimName: {{ .Values.volumes.media.pvc.claimName }}
+        - name: subtitle-proxy-config
+          configMap:
+            name: "{{ .Values.appName }}-subtitle-proxy-config"
