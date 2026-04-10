@@ -6,7 +6,7 @@ Image: `linuxserver/qbittorrent`
 ## Configuration
 
 - **WebUI user**: binh
-- **WebUI alternative UI**: enabled (custom, at `/config/qBittorrent/webui`)
+- **WebUI alternative UI**: VueTorrent (installed via `DOCKER_MODS=ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest`)
 - **CSRF protection**: disabled (required for reverse proxy access)
 - **Clickjacking protection**: disabled (required for reverse proxy access)
 
@@ -44,6 +44,12 @@ Image: `linuxserver/qbittorrent`
 ### Logging
 
 - File logging enabled, max 65KB, 1 day age, auto-delete old logs, backup enabled
+
+## VueTorrent
+
+Installed via linuxserver.io `DOCKER_MODS` mechanism, not the qBittorrent "Alternative WebUI" config setting. The mod (`ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest`) installs VueTorrent during container init and configures qBittorrent to use it automatically.
+
+**Why not the built-in Alternative WebUI setting?** qBittorrent v5.1.4 returns HTTP 500 "Unacceptable file type, only regular file is allowed" when setting `alternative_webui_path` via either the config file or the API. This appears to be a v5 bug or security restriction that blocks all alternative WebUI paths regardless of content.
 
 ## Known issues
 

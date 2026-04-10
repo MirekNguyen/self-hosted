@@ -19,6 +19,9 @@ spec:
           repository: linuxserver/qbittorrent
           tag: 5.1.4
 
+        extraEnv:
+          DOCKER_MODS: ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
+
         ingress:
           host: mirekng.com
           hostPrefix: qbittorrent
