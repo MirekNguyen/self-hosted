@@ -19,8 +19,10 @@ spec:
           repository: linuxserver/qbittorrent
           tag: 5.1.4
 
-        extraEnv:
-          DOCKER_MODS: ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
+        # extraEnv:
+        #   DOCKER_MODS: ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
+        # NOTE: VueTorrent disabled - qBittorrent alternative WebUI is broken
+        # https://github.com/qbittorrent/qBittorrent/issues/24030
 
         ingress:
           host: mirekng.com
