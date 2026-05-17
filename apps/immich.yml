@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: immich
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MirekNguyen/self-hosted
+    targetRevision: kubernetes
+    path: charts/immich
+    helm:
+      valuesObject:
+        namespace: immich
+        appName: immich
+
+        image:
+          repository: ghcr.io/immich-app/immich-server
+          tag: v2.6.3
+
+        machineLearning:
+          image:
+            repository: ghcr.io/immich-app/immich-machine-learning
+            tag: v2.6.3
+
+        postgres:
+          image:
+            repository: ghcr.io/tensorchord/cloudnative-vectorchord
+            tag: "16.9-0.4.3"
+          pvc:
+            claimName: immich-db-pvc
+
+        valkey:
+          image:
+            repository: docker.io/valkey/valkey
+            tag: 9.1-alpine
+
+        persistence:
+          library:
+            claimName: photos-pvc
+
+        ingress:
+          host: mirekng.com
+          hostPrefix: photos
+          sslSecretName: ssl-certificate
+
+        db:
+          name: immich
+          user: immich
+          password: immich
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: immich
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

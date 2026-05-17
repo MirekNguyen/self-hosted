@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-postgres
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-postgres
+  template:
+    metadata:
+      labels:
+        app: immich-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: "{{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag }}"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: "{{ .Values.db.name }}"
+            - name: POSTGRES_USER
+              value: "{{ .Values.db.user }}"
+            - name: POSTGRES_PASSWORD
+              value: "{{ .Values.db.password }}"
+            - name: POSTGRES_INITDB_ARGS
+              value: "--data-checksums"
+          args:
+            - "-c"
+            - "shared_preload_libraries=vchord.so"
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.postgres.pvc.claimName }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-postgres-service
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: immich-postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
