@@ -13,6 +13,8 @@ spec:
       labels:
         app: immich-postgres
     spec:
+      securityContext:
+        fsGroup: 999
       initContainers:
         - name: fix-permissions
           image: busybox
