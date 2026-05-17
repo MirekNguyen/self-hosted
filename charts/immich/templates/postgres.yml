@@ -13,6 +13,13 @@ spec:
       labels:
         app: immich-postgres
     spec:
+      initContainers:
+        - name: fix-permissions
+          image: busybox
+          command: ["sh", "-c", "chown -R 999:999 /data"]
+          volumeMounts:
+            - name: db-data
+              mountPath: /data
       containers:
         - name: postgres
           image: "{{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag }}"
