@@ -15,17 +15,6 @@ spec:
       labels:
         app: "{{ .Values.appName }}-db-selector"
     spec:
-      securityContext:
-        fsGroup: 70
-      initContainers:
-        - name: fix-permissions
-          image: busybox
-          command: ["sh", "-c", "chown -R 70:70 /data"]
-          securityContext:
-            runAsUser: 0
-          volumeMounts:
-            - mountPath: /data
-              name: db-data
       containers:
         - name: postgres
           image: "{{ .Values.db.image.repository }}:{{ .Values.db.image.tag }}"
