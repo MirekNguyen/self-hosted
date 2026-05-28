@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: paperclip-data-pv
+spec:
+  capacity:
+    storage: 5Gi
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/storage/config/paperclip-data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: paperclip-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: paperclip-db-pv
+spec:
+  capacity:
+    storage: 5Gi
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/storage/config/paperclip-db"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: paperclip-db-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 5Gi

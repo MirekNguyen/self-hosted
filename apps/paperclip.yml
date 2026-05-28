@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: paperclip
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MirekNguyen/self-hosted
+    targetRevision: kubernetes
+    path: charts/paperclip
+    helm:
+      valuesObject:
+        replicas: 1
+        namespace: default
+        appName: paperclip
+
+        image:
+          repository: ghcr.io/paperclipai/paperclip
+          tag: latest
+
+        ports:
+          containerPort: 3100
+          servicePort: 3100
+
+        ingress:
+          host: mirekng.com
+          hostPrefix: paperclip
+          sslSecretName: ssl-certificate
+
+        db:
+          image:
+            repository: postgres
+            tag: "16"
+          user: paperclip
+          name: paperclip
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

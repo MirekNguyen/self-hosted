@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Values.appName }}-deployment"
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: "{{ .Values.appName }}-deployment"
+spec:
+  selector:
+    matchLabels:
+      app: "{{ .Values.appName }}-selector"
+  replicas: {{ .Values.replicas }}
+  template:
+    metadata:
+      labels:
+        app: "{{ .Values.appName }}-selector"
+    spec:
+      containers:
+        - name: {{ .Values.appName }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.ports.containerPort }}
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.appName }}-secret"
+                  key: DATABASE_URL
+            - name: PORT
+              value: "{{ .Values.ports.containerPort }}"
+            - name: SERVE_UI
+              value: "true"
+            - name: PAPERCLIP_DEPLOYMENT_MODE
+              value: "authenticated"
+            - name: PAPERCLIP_DEPLOYMENT_EXPOSURE
+              value: "public"
+            - name: PAPERCLIP_PUBLIC_URL
+              value: "https://{{ .Values.ingress.hostPrefix }}.{{ .Values.ingress.host }}"
+            - name: BETTER_AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.appName }}-secret"
+                  key: BETTER_AUTH_SECRET
+            - name: DEEPSEEK_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.appName }}-secret"
+                  key: DEEPSEEK_API_KEY
+          volumeMounts:
+            - mountPath: /paperclip
+              name: paperclip-data
+      volumes:
+        - name: paperclip-data
+          persistentVolumeClaim:
+            claimName: paperclip-data-pvc
