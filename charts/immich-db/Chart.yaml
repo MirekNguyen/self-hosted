@@ -1,0 +1,4 @@
+apiVersion: v2
+name: immich-db
+version: 1.0.0
+description: PostgreSQL with vectorchord for Immich

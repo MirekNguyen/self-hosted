@@ -64,6 +64,10 @@ Applied to HD-1080p profile with `minFormatScore: 0` (prefer but don't require).
 - `seriesFolderFormat`: `{Series TitleYear}`
 - `seasonFolderFormat`: `Season {season:00}`
 
+### Season folders
+
+All series have `seasonFolder: true`. Sonarr organizes episode files into `Season XX/` subfolders under each series path. This is required for Jellyfin to correctly identify seasons.
+
 ## Known issues
 
 - **ntfy notifications failing (401)**: The password for user `binh` on `ntfy.mirekng.com` is wrong or expired. Needs manual reset in Sonarr Settings > Connect > ntfy.sh. Triggers are correctly configured (onGrab, onDownload, onImportComplete all enabled).
@@ -73,3 +77,4 @@ Applied to HD-1080p profile with `minFormatScore: 0` (prefer but don't require).
 - [2026-04-10](changelog/2026-04-10-media-stack.md) — Enabled hardlinks, enabled extra file import, removed dead Transmission client and Ruddarr webhook, image update 4.0.16 -> 4.0.17
 - [2026-04-10](changelog/2026-04-10-media-stack-optimization.md) — Enabled episode renaming, enabled quality upgrades for HD-1080p, fixed ntfy notification triggers
 - [2026-04-10](changelog/2026-04-10-indexer-overhaul.md) — Added custom formats for SubsPlease/Erai-raws, removed broken release profile
+- [2026-04-10](changelog/2026-04-10-season-folders.md) — Enabled seasonFolder on all 41 series, moved 33 series' files into season folders

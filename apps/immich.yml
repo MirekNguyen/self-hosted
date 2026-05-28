@@ -6,48 +6,53 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/MirekNguyen/self-hosted
-    targetRevision: kubernetes
-    path: charts/immich
+    repoURL: ghcr.io/immich-app/immich-charts
+    targetRevision: 0.12.0
+    chart: immich
     helm:
       valuesObject:
-        namespace: immich
-        appName: immich
+        controllers:
+          main:
+            containers:
+              main:
+                image:
+                  tag: v2.6.3
+                env:
+                  DB_HOSTNAME: immich-postgres-service
+                  DB_PORT: "5432"
+                  DB_DATABASE_NAME: immich
+                  DB_USERNAME: immich
+                  DB_PASSWORD: immich
+                  REDIS_HOSTNAME: immich-valkey
 
-        image:
-          repository: ghcr.io/immich-app/immich-server
-          tag: v2.6.3
-
-        machineLearning:
-          image:
-            repository: ghcr.io/immich-app/immich-machine-learning
-            tag: v2.6.3
-
-        postgres:
-          image:
-            repository: ghcr.io/tensorchord/cloudnative-vectorchord
-            tag: "16.9-0.4.3"
-          pvc:
-            claimName: immich-db-pvc
+        immich:
+          persistence:
+            library:
+              existingClaim: photos-pvc
 
         valkey:
-          image:
-            repository: docker.io/valkey/valkey
-            tag: 9.1-alpine
+          enabled: true
 
-        persistence:
-          library:
-            claimName: photos-pvc
+        server:
+          enabled: true
+          ingress:
+            main:
+              enabled: true
+              annotations:
+                nginx.ingress.kubernetes.io/proxy-body-size: "0"
+              hosts:
+                - host: photos.mirekng.com
+                  paths:
+                    - path: "/"
+                      service:
+                        identifier: main
+              tls:
+                - secretName: ssl-certificate
+                  hosts:
+                    - photos.mirekng.com
 
-        ingress:
-          host: mirekng.com
-          hostPrefix: photos
-          sslSecretName: ssl-certificate
-
-        db:
-          name: immich
-          user: immich
-          password: immich
+        machine-learning:
+          enabled: true
 
   destination:
     server: https://kubernetes.default.svc

@@ -94,6 +94,49 @@ kubectl exec -n default deployment/jellyfin-deployment -c jellyfin -- \
   ps aux | grep ffmpeg
 ```
 
+## Metadata providers
+
+### TV Shows library (`/downloads/tv-shows`)
+
+| Type | Providers (priority order) |
+|------|---------------------------|
+| Series metadata | TMDb > OMDB |
+| Series images | TMDb |
+| Season metadata | TMDb |
+| Season images | TMDb |
+| Episode metadata | TMDb > OMDB |
+| Episode images | TMDb > OMDB > Embedded > Screen Grabber |
+
+### Movies library (`/downloads/movies`)
+
+| Type | Providers (priority order) |
+|------|---------------------------|
+| Movie metadata | TMDb > OMDB |
+| Movie images | TMDb > OMDB > Embedded > Screen Grabber |
+
+### Anime library (`/downloads/anime`)
+
+| Type | Providers (priority order) |
+|------|---------------------------|
+| Series metadata | AniDB > TMDb > OMDB |
+| Series images | AniDB > TMDb |
+| Season metadata | AniDB > TMDb |
+| Season images | AniDB > TMDb |
+| Episode metadata | AniDB > TMDb > OMDB |
+| Episode images | AniDB > TMDb > OMDB > Embedded > Screen Grabber |
+
+**Rationale**: AniDB is the best source for anime-specific metadata (absolute episode numbers, Japanese titles, season grouping). TMDb is the gold standard for general TV/movies. OMDB is a fallback for missing metadata. AniDB is excluded from TV Shows and Movies libraries to avoid irrelevant lookups.
+
+### Installed plugins
+
+| Plugin | Version | Purpose |
+|--------|---------|---------|
+| AniDB | 11.0.0.0 | Anime metadata (series, season, episode) |
+| Ani-Sync | 3.8.0.0 | AniList/MAL watch status sync (not connected) |
+| Open Subtitles | 23.0.0.0 | Subtitle fetching |
+| TMDb | 10.11.5.0 | Primary metadata for TV/movies (built-in) |
+| OMDb | 10.11.5.0 | Fallback metadata (built-in) |
+
 ## Notes
 
 - The `encoding.xml` is stored on the Jellyfin config PVC (`/storage/config/jellyfin` on the host, mounted at `/config` in the container). Changes persist across pod restarts but are NOT managed by git — apply via `kubectl exec`.
@@ -104,3 +147,4 @@ kubectl exec -n default deployment/jellyfin-deployment -c jellyfin -- \
 
 - [2026-04-10](changelog/2026-04-10-jellyfin.md) — Subtitle burn-in proxy, encoding optimization for N150
 - [2026-04-10](changelog/2026-04-10-media-stack-optimization.md) — Removed 1 Mbps remote bitrate cap, reduced library monitor delay
+- [2026-04-10](changelog/2026-04-10-season-folders.md) — Fixed metadata providers, enabled AniDB for anime library

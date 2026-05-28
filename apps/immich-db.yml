@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: immich-db
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MirekNguyen/self-hosted
+    targetRevision: kubernetes
+    path: charts/immich-db
+    helm:
+      valuesObject:
+        namespace: immich
+
+        image:
+          repository: ghcr.io/tensorchord/cloudnative-vectorchord
+          tag: "16.9-0.4.3"
+
+        db:
+          name: immich
+          user: immich
+          password: immich
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: immich
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

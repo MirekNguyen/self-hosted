@@ -1,5 +1,0 @@
-apiVersion: v2
-name: immich
-description: Immich - Self-hosted photo and video management
-version: 1.0.0
-appVersion: "v2.6.3"
