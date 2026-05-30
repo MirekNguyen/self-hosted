@@ -53,17 +53,6 @@ spec:
 
         machine-learning:
           enabled: true
-          controllers:
-            main:
-              containers:
-                main:
-                  resources:
-                    limits:
-                      cpu: "2"
-                      memory: 2Gi
-                    requests:
-                      cpu: "500m"
-                      memory: 512Mi
 
   destination:
     server: https://kubernetes.default.svc
