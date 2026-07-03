@@ -130,6 +130,8 @@ Secrets are managed via **Infisical** through the **External Secrets Operator**:
 | qBittorrent | qbittorrent.mirekng.com | custom | Torrent client | `docs/qbittorrent.md` |
 | FlareSolverr | — | custom | Cloudflare challenge solver | `docs/flaresolverr.md` |
 | Jellyseerr | jellyseerr.mirekng.com | custom | Media request management (Seerr v3) | `docs/jellyseerr.md` |
+| Immich | photos.mirekng.com | external | Self-hosted photo & video backup | `docs/immich.md` |
+| Immich DB | — | custom | PostgreSQL + VectorChord for Immich | `docs/immich.md` |
 | Home Assistant | home.mirekng.com | custom | Home automation | — |
 | ArgoCD | argocd.mirekng.com | external | GitOps deployment | — |
 | cert-manager | — | external | TLS certificate automation (Let's Encrypt + Cloudflare DNS) | — |
