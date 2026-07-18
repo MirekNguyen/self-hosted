@@ -17,7 +17,7 @@ spec:
 
         image:
           repository: linuxserver/homeassistant
-          tag: 2025.12.4
+          tag: 2026.7.0
 
         ports:
           containerPort: 8123

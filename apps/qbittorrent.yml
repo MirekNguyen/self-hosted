@@ -17,7 +17,7 @@ spec:
 
         image:
           repository: linuxserver/qbittorrent
-          tag: 5.2.0
+          tag: 5.2.2
 
         # extraEnv:
         #   DOCKER_MODS: ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest

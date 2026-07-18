@@ -17,7 +17,7 @@ spec:
 
         image:
           repository: linuxserver/bazarr
-          tag: 1.5.3
+          tag: 1.5.6
 
         ports:
           containerPort: 6767
