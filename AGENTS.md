@@ -123,6 +123,7 @@ Secrets are managed via **Infisical** through the **External Secrets Operator**:
 | Service | Subdomain | Chart | Purpose | Docs |
 |---------|-----------|-------|---------|------|
 | Jellyfin | tv.mirekng.com | custom | Media server (with subtitle proxy sidecar) | `docs/jellyfin.md` |
+| Navidrome | music.mirekng.com | custom | Music server (Subsonic/OpenSubsonic) | `docs/navidrome.md` |
 | Sonarr | sonarr.mirekng.com | custom | TV show management | `docs/sonarr.md` |
 | Radarr | radarr.mirekng.com | custom | Movie management | `docs/radarr.md` |
 | Bazarr | bazarr.mirekng.com | custom | Subtitle management | `docs/bazarr.md` |

@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: navidrome
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MirekNguyen/self-hosted
+    targetRevision: kubernetes
+    path: charts/navidrome
+    helm:
+      valuesObject:
+        replicas: 1
+        namespace: default
+        appName: navidrome
+
+        image:
+          repository: deluan/navidrome
+          tag: 0.64.2
+
+        ports:
+          containerPort: 4533
+          servicePort: 4533
+
+        ingress:
+          host: mirekng.com
+          hostPrefix: music
+          sslSecretName: ssl-certificate
+
+        volumes:
+          config:
+            name: config-data
+            pvc:
+              mount: /data
+              claimName: navidrome-config-pvc
+          media:
+            name: media-data
+            pvc:
+              mount: /downloads
+              claimName: media-pvc
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
