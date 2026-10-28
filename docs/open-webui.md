@@ -14,7 +14,7 @@ Migrated from Dokploy on Hetzner to k3s on 2026-10-28 — see
 | Deployment | `open-webui-deployment` | 1 replica, `strategy: Recreate` |
 | Service | `open-webui-service` | port 8080 |
 | Ingress | `open-webui-ingress` | Traefik, TLS via wildcard `ssl-certificate` |
-| Middleware | `open-webui-redirect-https` | Traefik `redirectScheme` (HTTP → HTTPS, 308) |
+| Middleware | `open-webui-redirect-https` | Traefik `redirectScheme` (HTTP → HTTPS, permanent: 301 GET / 308 other) |
 | PVC | `open-webui-data-pvc` | hostPath `/storage/config/open-webui` (NVMe), mounted at `/app/backend/data` |
 | Secret | `open-webui-secret` | created out-of-band with kubectl, **not** in git |
 
