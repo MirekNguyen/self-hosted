@@ -166,6 +166,7 @@ Rules for agents:
 | Immich | photos.mirekng.com | external | Self-hosted photo & video backup | `docs/immich.md` |
 | Immich DB | — | custom | PostgreSQL + VectorChord for Immich | `docs/immich.md` |
 | Open WebUI | chat.mirekng.com | custom | LLM chat UI (PocketID SSO), migrated from Dokploy | `docs/open-webui.md` |
+| Hermes Agent | hermes.mirekng.com (dashboard), gateway.mirekng.com (API) | custom | AI agent + Telegram bot, migrated from Dokploy | `docs/hermes.md` |
 | Home Assistant | home.mirekng.com | custom | Home automation | — |
 | ArgoCD | argocd.mirekng.com | external | GitOps deployment | — |
 | cert-manager | — | external | TLS certificate automation (Let's Encrypt + Cloudflare DNS) | — |
