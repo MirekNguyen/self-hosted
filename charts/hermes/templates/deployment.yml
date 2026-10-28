@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Values.appName }}-deployment"
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: "{{ .Values.appName }}-deployment"
+spec:
+  selector:
+    matchLabels:
+      app: "{{ .Values.appName }}-selector"
+  replicas: {{ .Values.replicas }}
+  # Single-writer SQLite state + Telegram long-polling (one consumer per bot token):
+  # the old pod must be gone before the new one starts.
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: "{{ .Values.appName }}-selector"
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: {{ .Values.appName }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          {{- with .Values.args }}
+          args:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            {{- range .Values.ports }}
+            - name: {{ .name }}
+              containerPort: {{ .containerPort }}
+            {{- end }}
+          {{- with .Values.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.existingSecret }}
+          envFrom:
+            - secretRef:
+                name: {{ . }}
+          {{- end }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.probe }}
+          startupProbe:
+            httpGet:
+              path: {{ .path }}
+              port: {{ .port }}
+            periodSeconds: 10
+            failureThreshold: 60
+          livenessProbe:
+            httpGet:
+              path: {{ .path }}
+              port: {{ .port }}
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 4
+          readinessProbe:
+            httpGet:
+              path: {{ .path }}
+              port: {{ .port }}
+            periodSeconds: 10
+            timeoutSeconds: 5
+          {{- end }}
+          volumeMounts:
+            {{- range $key, $vol := .Values.volumes }}
+            - mountPath: {{ $vol.pvc.mount }}
+              name: {{ $vol.name }}
+            {{- end }}
+            {{- if .Values.shmSize }}
+            - mountPath: /dev/shm
+              name: dshm
+            {{- end }}
+      volumes:
+        {{- range $key, $vol := .Values.volumes }}
+        - name: {{ $vol.name }}
+          persistentVolumeClaim:
+            claimName: {{ $vol.pvc.claimName }}
+        {{- end }}
+        {{- if .Values.shmSize }}
+        # Headless browsers need more than the 64Mi default /dev/shm.
+        - name: dshm
+          emptyDir:
+            medium: Memory
+            sizeLimit: {{ .Values.shmSize }}
+        {{- end }}

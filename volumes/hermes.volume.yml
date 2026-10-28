@@ -1,0 +1,65 @@
+# /opt/data: HERMES_HOME (state.db, sessions, skills, cron, config.yaml, .env)
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: hermes-data-pv
+spec:
+  capacity:
+    storage: 20Gi
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: default
+    name: hermes-data-pvc
+  hostPath:
+    path: "/storage/config/hermes/data"
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: hermes-data-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage
+  volumeName: hermes-data-pv
+  resources:
+    requests:
+      storage: 20Gi
+---
+# /root: root-owned caches (uv, camoufox browser) - kept to avoid re-downloads
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: hermes-root-pv
+spec:
+  capacity:
+    storage: 10Gi
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: default
+    name: hermes-root-pvc
+  hostPath:
+    path: "/storage/config/hermes/root"
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: hermes-root-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage
+  volumeName: hermes-root-pv
+  resources:
+    requests:
+      storage: 10Gi

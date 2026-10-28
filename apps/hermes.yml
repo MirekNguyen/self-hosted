@@ -1,0 +1,101 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hermes
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MirekNguyen/self-hosted
+    targetRevision: kubernetes
+    path: charts/hermes
+    helm:
+      valuesObject:
+        replicas: 1
+        namespace: default
+        appName: hermes
+
+        image:
+          repository: nousresearch/hermes-agent
+          tag: v0.22.5
+
+        args: ["gateway", "run"]
+
+        ports:
+          - name: dashboard
+            containerPort: 9119
+            servicePort: 9119
+          - name: gateway
+            containerPort: 8642
+            servicePort: 8642
+
+        ingress:
+          host: mirekng.com
+          sslSecretName: ssl-certificate
+          redirectHttps: true
+          routes:
+            - hostPrefix: hermes
+              portName: dashboard
+            - hostPrefix: gateway
+              portName: gateway
+
+        probe:
+          path: /health
+          port: gateway
+
+        # TELEGRAM_BOT_TOKEN, TELEGRAM_ALLOWED_USERS, API_SERVER_KEY, NOTION_API_KEY,
+        # HINDSIGHT_API_KEY, VIKUNJA_TOKEN, EXA_API_KEY, DEEPSEEK_API_KEY, XIAOMI_API_KEY.
+        # Created out-of-band with kubectl (see docs/hermes.md), never committed.
+        existingSecret: hermes-secret
+
+        env:
+          # Dashboard auth comes from dashboard.basic_auth in /opt/data/config.yaml;
+          # the image refuses to bind it on 0.0.0.0 without an auth provider.
+          - name: HERMES_DASHBOARD
+            value: "1"
+          - name: API_SERVER_ENABLED
+            value: "true"
+          - name: API_SERVER_HOST
+            value: 0.0.0.0
+          - name: HINDSIGHT_API_URL
+            value: https://api.hindsight.vectorize.io
+          - name: VIKUNJA_URL
+            value: https://vikunja.mirekng.com
+          - name: HERMES_SPOTIFY_CLIENT_ID
+            value: 1414f7cb377b4a718ce1025f43b3d282
+
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+          limits:
+            cpu: "2"
+            memory: 4Gi
+
+        shmSize: 1Gi
+
+        # s6-overlay runs as root and drops to the hermes user (uid 10000) itself,
+        # and the agent drives headless browsers; keep Docker-equivalent defaults.
+        securityContext:
+          privileged: false
+          seccompProfile:
+            type: RuntimeDefault
+
+        volumes:
+          data:
+            name: hermes-data
+            pvc:
+              mount: /opt/data
+              claimName: hermes-data-pvc
+          root:
+            name: hermes-root
+            pvc:
+              mount: /root
+              claimName: hermes-root-pvc
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

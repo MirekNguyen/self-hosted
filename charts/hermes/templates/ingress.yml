@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "{{ .Values.appName }}-ingress"
+  namespace: {{ .Values.namespace }}
+  {{- if .Values.ingress.redirectHttps }}
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: "{{ .Values.namespace }}-{{ .Values.appName }}-redirect-https@kubernetescrd"
+  {{- end }}
+spec:
+  tls:
+  - hosts:
+    {{- range .Values.ingress.routes }}
+    - "{{ .hostPrefix }}.{{ $.Values.ingress.host }}"
+    {{- end }}
+    secretName: {{ .Values.ingress.sslSecretName }}
+  rules:
+  {{- range .Values.ingress.routes }}
+  - host: "{{ .hostPrefix }}.{{ $.Values.ingress.host }}"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: "{{ $.Values.appName }}-service"
+            port:
+              name: {{ .portName }}
+  {{- end }}
