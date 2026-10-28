@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: open-webui-data-pv
+spec:
+  capacity:
+    storage: 10Gi
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: default
+    name: open-webui-data-pvc
+  hostPath:
+    path: "/storage/config/open-webui"
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: open-webui-data-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage
+  volumeName: open-webui-data-pv
+  resources:
+    requests:
+      storage: 10Gi

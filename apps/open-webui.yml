@@ -1,0 +1,86 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: open-webui
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MirekNguyen/self-hosted
+    targetRevision: kubernetes
+    path: charts/open-webui
+    helm:
+      valuesObject:
+        replicas: 1
+        namespace: default
+        appName: open-webui
+
+        image:
+          repository: ghcr.io/open-webui/open-webui
+          tag: 0.12.4
+
+        ports:
+          containerPort: 8080
+          servicePort: 8080
+
+        ingress:
+          host: mirekng.com
+          hostPrefix: chat
+          sslSecretName: ssl-certificate
+
+        # WEBUI_SECRET_KEY, OAUTH_CLIENT_SECRET, OPENAI_API_KEY, OPENAI_API_ENDPOINT.
+        # Created out-of-band with kubectl (see docs/open-webui.md), never committed.
+        existingSecret: open-webui-secret
+
+        env:
+          - name: ENABLE_OAUTH_SIGNUP
+            value: "true"
+          - name: OAUTH_PROVIDER_NAME
+            value: PocketID
+          - name: OAUTH_MERGE_ACCOUNTS_BY_EMAIL
+            value: "true"
+          - name: OAUTH_CLIENT_ID
+            value: 3ae7d4d5-f0d2-4dcb-8af8-5d6bdcce3d25
+          - name: OPENID_PROVIDER_URL
+            value: https://sso.mirekng.com/.well-known/openid-configuration
+          - name: OPENID_REDIRECT_URI
+            value: https://chat.mirekng.com/oauth/oidc/callback
+          - name: OAUTH_SCOPES
+            value: openid email profile
+          - name: ANONYMIZED_TELEMETRY
+            value: "false"
+          - name: DO_NOT_TRACK
+            value: "true"
+          - name: SCARF_NO_ANALYTICS
+            value: "true"
+
+        resources:
+          requests:
+            cpu: 250m
+            memory: 768Mi
+          limits:
+            memory: 4Gi
+
+        # Image runs as root and existing data is root-owned; keep root but strip privileges.
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          capabilities:
+            drop:
+              - ALL
+          seccompProfile:
+            type: RuntimeDefault
+
+        volumes:
+          data:
+            name: open-webui-data
+            pvc:
+              mount: /app/backend/data
+              claimName: open-webui-data-pvc
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
