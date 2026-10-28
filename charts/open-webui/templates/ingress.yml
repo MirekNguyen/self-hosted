@@ -3,6 +3,10 @@ kind: Ingress
 metadata:
   name: "{{ .Values.appName }}-ingress"
   namespace: {{ .Values.namespace }}
+  {{- if .Values.ingress.redirectHttps }}
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: "{{ .Values.namespace }}-{{ .Values.appName }}-redirect-https@kubernetescrd"
+  {{- end }}
 spec:
   tls:
   - hosts:

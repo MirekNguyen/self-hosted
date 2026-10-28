@@ -112,11 +112,43 @@ Secrets are managed via **Infisical** through the **External Secrets Operator**:
 
 ## Key tools and paths
 
-| Tool | Path |
+Current workstation: `mng` (Linux, user `binh`, repo at `~/Work/personal/self-hosted`).
+
+| Tool | Path / how to get it |
 |------|------|
-| kubectl | `/run/current-system/sw/bin/kubectl` |
-| helm | `/opt/homebrew/bin/helm` |
-| User shell | fish (`/opt/homebrew/bin/fish`) |
+| kubectl | `~/.nix-profile/bin/kubectl` (`nix --extra-experimental-features 'nix-command flakes' profile add nixpkgs#kubectl`) |
+| helm | `~/.nix-profile/bin/helm` |
+| kube context | **always pass `--context=k3s`** — the default context is an unrelated work AKS cluster |
+
+## Workstation access (SSH, kubectl, DNS)
+
+| Host alias | Target | Purpose |
+|------------|--------|---------|
+| `ssh beelink` | `binh@vpn.mirekng.com` | k3s node (`109.239.79.2`, LAN `192.168.1.100`) |
+| `ssh hetzner` | `root@mirekng.com` | Hetzner VM running Dokploy (`195.201.18.24`) |
+
+Both use `~/.ssh/personal`, which is **passphrase-protected**. The passphrase
+is stored in `~/.local/secrets/ssh-password.txt` (mode 600, dir 700). Load the
+key into the running ssh-agent with:
+
+```sh
+~/.local/bin/ssh-unlock     # idempotent; uses SSH_ASKPASS, never echoes the passphrase
+ssh -o BatchMode=yes hetzner hostname
+```
+
+Rules for agents:
+- Never `cat`/print the passphrase file or pass it on a command line; only use
+  `ssh-unlock` (it feeds the value via `~/.local/bin/ssh-askpass-file`).
+- Prefer key auth. Password login to Hetzner is possible but only as a repair
+  path (e.g. when `/root/.ssh` ownership breaks — see
+  `docs/changelog/2026-10-28-open-webui.md`).
+- Git pushes use `~/.ssh/github_personal` (set via repo-local
+  `core.sshCommand`); `~/.ssh/o2` is the work GitHub account.
+- k3s API: `https://vpn.mirekng.com:6443`, context `k3s` in `~/.kube/config`.
+- DNS: Cloudflare zone `mirekng.com` (`506db7dc5b952a23bae6c068e03a98ea`) via the
+  Cloudflare MCP. k3s apps get an explicit unproxied A record →
+  `109.239.79.2`; `*.mirekng.com` still points to Hetzner.
+- Dokploy (Hetzner) is reachable through the `dokploy-mcp` tools.
 
 ## Active services
 
@@ -133,6 +165,7 @@ Secrets are managed via **Infisical** through the **External Secrets Operator**:
 | Jellyseerr | jellyseerr.mirekng.com | custom | Media request management (Seerr v3) | `docs/jellyseerr.md` |
 | Immich | photos.mirekng.com | external | Self-hosted photo & video backup | `docs/immich.md` |
 | Immich DB | — | custom | PostgreSQL + VectorChord for Immich | `docs/immich.md` |
+| Open WebUI | chat.mirekng.com | custom | LLM chat UI (PocketID SSO), migrated from Dokploy | `docs/open-webui.md` |
 | Home Assistant | home.mirekng.com | custom | Home automation | — |
 | ArgoCD | argocd.mirekng.com | external | GitOps deployment | — |
 | cert-manager | — | external | TLS certificate automation (Let's Encrypt + Cloudflare DNS) | — |
